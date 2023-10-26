@@ -26,7 +26,7 @@ Data created by the app will be stored in a Postgres database. Chat GPT API and 
 
 ## Database Schema
 
-![Database Schema](./Proposal/DatabaseSchema.png)
+![Database Schema](./proposal/DatabaseSchema.png)
 
 ## Possible issues
 
