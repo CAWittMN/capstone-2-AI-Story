@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "User Schema",
+  "required": [
+    "username",
+    "password",
+    "firstName",
+    "lastName",
+    "email",
+    "age",
+    "gender"
+  ],
+  "properties": {
+    "username": {
+      "type": "string",
+      "title": "The username Schema"
+    },
+    "password": {
+      "type": "string",
+      "title": "The password Schema"
+    },
+    "firstName": {
+      "type": "string",
+      "title": "The firstName Schema"
+    },
+    "lastName": {
+      "type": "string",
+      "title": "The lastName Schema"
+    },
+    "email": {
+      "type": "string",
+      "title": "The email Schema"
+    },
+    "age": {
+      "type": "integer",
+      "title": "The age Schema"
+    },
+    "gender": {
+      "type": "string",
+      "title": "The gender Schema"
+    }
+  },
+  "additionalProperties": false
+}

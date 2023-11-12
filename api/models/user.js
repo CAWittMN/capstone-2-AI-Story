@@ -1,68 +1,90 @@
-"use strict";
-
-const { sq } = require("../config/db.js");
-const { DataTypes, Model } = require("sequelize");
-const bcrypt = require("bcrypt");
-const { BCRYPT_WORK_FACTOR } = require("../config/config.js");
+const { Model, DataTypes } = require("sequelize");
+const db = require("../db");
 const Story = require("./story");
+const bcrypt = require("bcrypt");
+const { BCRYPT_WORK_FACTOR } = require("../config");
+const {
+  BadRequestError,
+  UnauthorizedError,
+  NotFoundError,
+} = require("../expressError");
+const { sqlForPartialUpdate } = require("../helpers/sql");
 
-class User extends Model {}
+class User extends Model {
+  stories;
+  static async register(info) {
+    const duplicateCheck = await User.findOne({
+      where: { username: info.username },
+    });
+    if (duplicateCheck) {
+      throw new BadRequestError(`Duplicate username: ${info.username}`);
+    }
+    info.password = await bcrypt.hash(info.password, BCRYPT_WORK_FACTOR);
+    console.log(info.password);
+
+    const newUser = await User.create({ ...info, isAdmin: false });
+    delete newUser.dataValues.password;
+    return newUser;
+  }
+  static async login(username, password) {
+    const user = await User.findOne({ where: { username }, include: Story });
+    if (user) {
+      const isValid = await bcrypt.compare(password, user.password);
+      if (isValid) {
+        delete user.dataValues.password;
+        return user;
+      } else {
+        throw new UnauthorizedError("Invalid username/password");
+      }
+    }
+    throw new NotFoundError("No such user");
+  }
+  getStories() {}
+}
 User.init(
   {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     username: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING(50),
       allowNull: false,
       unique: true,
-      validate: {
-        notNull: {
-          msg: "Please provide a username",
-        },
-      },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        notNull: {
-          msg: "Please provide a password",
-        },
-        len: {
-          args: [5, 30],
-          msg: "Password must be between 8 and 30 characters",
-        },
-      },
-      set(value) {
-        this.setDataValue(
-          "password",
-          bcrypt.hashSync(value, BCRYPT_WORK_FACTOR)
-        );
-      },
     },
-    isAdmin: {
-      type: DataTypes.BOOLEAN,
+    email: {
+      type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: false,
     },
-    gender: {
-      type: DataTypes.STRING(10),
+    firstName: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
     },
     age: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    gender: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
-    underscored: true,
-    sequelize: sq,
+    sequelize: db,
     modelName: "User",
+    tableName: "users",
   }
 );
 
 User.hasMany(Story);
+Story.belongsTo(User);
 
 module.exports = User;

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "default": {},
+  "title": "Login Schema",
+  "required": ["username", "password"],
+  "properties": {
+    "username": {
+      "type": "string",
+
+      "title": "The username Schema",
+      "examples": ["PooPoo25"]
+    },
+    "password": {
+      "title": "The password Schema",
+      "examples": ["poopoo25!"]
+    }
+  }
+}

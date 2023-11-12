@@ -3,7 +3,7 @@
 /** Convenience middleware to handle common auth cases in routes. */
 
 const jwt = require("jsonwebtoken");
-const { SECRET_KEY } = require("../config/config");
+const { SECRET_KEY } = require("../config");
 const { UnauthorizedError } = require("../expressError");
 
 /** Middleware: Authenticate user.
@@ -56,7 +56,6 @@ const ensureAdmin = (req, res, next) => {
 
 /** Middleware for ensuring the user is the owner
  */
-
 const ensureCorrectUser = (req, res, next) => {
   try {
     if (!res.locals.user) throw new UnauthorizedError();
