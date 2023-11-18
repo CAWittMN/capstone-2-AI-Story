@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
+const BASE_URL = import.meta.env.REACT_APP_BASE_URL || "http://localhost:3005";
 
 /** API Class.
  *
@@ -33,17 +33,22 @@ class StoryGenApi {
 
   // Individual API routes
 
+  static loadToken(token, username) {
+    StoryGenApi.token = token;
+    StoryGenApi.username = username;
+  }
+
   //User routes
   static async login(data) {
     let res = await this.request(`auth/login`, data, "post");
     StoryGenApi.token = res.token;
     StoryGenApi.username = res.username;
-    return res.token;
+    return res;
   }
 
   static async logout() {
-    StoryGenApi.token = null;
     StoryGenApi.username = null;
+    StoryGenApi.token = null;
   }
 
   static async register(data) {
@@ -51,6 +56,16 @@ class StoryGenApi {
     StoryGenApi.token = res.token;
     StoryGenApi.username = res.username;
     return res.token;
+  }
+
+  static async getUser() {
+    let res = await this.request(`users/${this.username}`);
+    return res.user;
+  }
+
+  static async getUserStories() {
+    let res = await this.request(`users/${this.username}/stories`);
+    return res.stories;
   }
 
   //Story routes
@@ -66,13 +81,13 @@ class StoryGenApi {
   }
 
   static async createStory(data) {
-    let res = await this.request(`stories/${this.username}/new`, data, "post");
+    let res = await this.request(`stories/new`, data, "post");
     return res.story;
   }
 
   static async createNewChapter(data, storyId) {
     let res = await this.request(
-      `stories/${this.username}/${storyId}/new-chapter`,
+      `stories/${storyId}/new-chapter`,
       data,
       "post"
     );

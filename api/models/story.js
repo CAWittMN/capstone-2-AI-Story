@@ -129,7 +129,7 @@ Story.init(
   }
 );
 
-Story.hasMany(Chapter);
-Chapter.belongsTo(Story);
+Story.hasMany(Chapter, { as: "chapters" });
+Chapter.belongsTo(Story, { as: "story" });
 
 module.exports = Story;

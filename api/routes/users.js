@@ -1,6 +1,11 @@
 const express = require("express");
 const User = require("../models/user");
-const { ensureAdmin, ensureCorrectUser } = require("../middleware/auth");
+const Story = require("../models/story");
+const {
+  ensureAdmin,
+  ensureCorrectUser,
+  ensureLoggedIn,
+} = require("../middleware/auth");
 const { BadRequestError } = require("../expressError");
 //const jsonschema = require("jsonschema");
 //const userUpdateSchema = require("../schemas/userUpdate.json");
@@ -29,7 +34,7 @@ router.get("/", ensureAdmin, async (req, res, next) => {
  *
  * Authorization required: logged in
  */
-router.get("/get-username", ensureCorrectUser, async (req, res, next) => {
+router.get("/get-username", ensureLoggedIn, async (req, res, next) => {
   try {
     const { username } = res.locals.user;
     return res.json({ username });
@@ -78,6 +83,32 @@ router.patch("/:username", ensureCorrectUser, async (req, res, next) => {
     });
     const updatedUser = await user.update(req.body);
     return res.json({ user: updatedUser });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
+ * GET /:username/stories => { stories: [ {...story}, {...story}, ...]}
+ * Returns all stories for a user.
+ * Sort by date updated
+ */
+router.get("/:username/stories", ensureCorrectUser, async (req, res, next) => {
+  const { username } = req.params;
+  console.log(username.yellow);
+  try {
+    const user = await User.findOne({
+      where: { username },
+      include: {
+        model: Story,
+        as: "stories",
+        order: [["updatedAt", "DESC"]],
+      },
+    });
+    console.log(user);
+    const { stories } = user.dataValues;
+    console.log(user);
+    return res.json({ stories });
   } catch (error) {
     return next(error);
   }

@@ -27,7 +27,7 @@ class User extends Model {
     return newUser;
   }
   static async login(username, password) {
-    const user = await User.findOne({ where: { username }, include: Story });
+    const user = await User.findOne({ where: { username } });
     if (user) {
       const isValid = await bcrypt.compare(password, user.password);
       if (isValid) {
@@ -84,7 +84,7 @@ User.init(
   }
 );
 
-User.hasMany(Story);
-Story.belongsTo(User);
+User.hasMany(Story, { as: "stories" });
+Story.belongsTo(User, { as: "user" });
 
 module.exports = User;
