@@ -69,15 +69,15 @@ const App = () => {
 
   const loadApi = () => {
     if (!StoryGenApi.token || !StoryGenApi.username) {
-      StoryGenApi.token = token;
-      StoryGenApi.username = username;
+      StoryGenApi.loadToken(token, username);
     }
   };
 
   const handleLogout = () => {
-    StoryGenApi.logout();
     setToken(null);
     setUsername(null);
+    setStories([]);
+    StoryGenApi.logout();
   };
 
   const handleLogin = async (data) => {

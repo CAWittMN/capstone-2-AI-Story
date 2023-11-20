@@ -25,7 +25,7 @@ const Background = () => {
           position: "fixed",
           zIndex: "-4",
           opacity: checkPage("/stories") ? "1" : "0",
-          transition: "all 1s ease",
+          transition: "opacity 1s ease",
         }}
       ></div>
       <div
@@ -40,7 +40,7 @@ const Background = () => {
           zIndex: "-3",
           opacity: checkPage("/stories/new") ? "1" : "0",
 
-          transition: "all 1s ease",
+          transition: "opacity 1s ease",
         }}
       ></div>
       <div

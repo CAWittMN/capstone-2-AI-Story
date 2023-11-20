@@ -56,14 +56,4 @@ router.post("/register", async function (req, res, next) {
   }
 });
 
-router.get("/test", async function (req, res, next) {
-  const user = await User.findOne({
-    where: { username: "testuser" },
-  });
-
-  user.dataValues.toot = "toot";
-
-  return res.json({ user });
-});
-
 module.exports = router;

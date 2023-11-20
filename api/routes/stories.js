@@ -28,18 +28,13 @@ router.get("/:username", ensureCorrectUser, async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { username },
+      include: { model: Story, as: "stories" },
+      order: [["stories", "updatedAt", "DESC"]],
     });
 
     console.log(user);
 
-    const stories = await Story.findAll({
-      where: { UserId: user.id },
-      order: [["updatedAt", "DESC"]],
-    });
-
-    console.log(stories);
-
-    return res.json({ stories });
+    return res.json({ stories: user.dataValues.stories });
   } catch (error) {
     return next(error);
   }
