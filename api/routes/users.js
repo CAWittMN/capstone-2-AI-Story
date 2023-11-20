@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/user");
 const Story = require("../models/story");
+const Chapter = require("../models/chapter");
 const {
   ensureAdmin,
   ensureCorrectUser,
@@ -83,32 +84,6 @@ router.patch("/:username", ensureCorrectUser, async (req, res, next) => {
     });
     const updatedUser = await user.update(req.body);
     return res.json({ user: updatedUser });
-  } catch (error) {
-    return next(error);
-  }
-});
-
-/**
- * GET /:username/stories => { stories: [ {...story}, {...story}, ...]}
- * Returns all stories for a user.
- * Sort by date updated
- */
-router.get("/:username/stories", ensureCorrectUser, async (req, res, next) => {
-  const { username } = req.params;
-  console.log(username.yellow);
-  try {
-    const user = await User.findOne({
-      where: { username },
-      include: {
-        model: Story,
-        as: "stories",
-        order: [["updatedAt", "DESC"]],
-      },
-    });
-    console.log(user);
-    const { stories } = user.dataValues;
-    console.log(user);
-    return res.json({ stories });
   } catch (error) {
     return next(error);
   }

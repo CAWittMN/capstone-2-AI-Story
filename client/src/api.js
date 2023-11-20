@@ -64,14 +64,15 @@ class StoryGenApi {
   }
 
   static async getUserStories() {
-    let res = await this.request(`users/${this.username}/stories`);
+    let res = await this.request(`stories/${this.username}`);
+    console.log(res.stories);
     return res.stories;
   }
 
   //Story routes
 
   static async getStory(storyId) {
-    let res = await this.request(`stories/${storyId}`);
+    let res = await this.request(`stories/${this.username}/${storyId}`);
     return res.story;
   }
 
@@ -81,13 +82,13 @@ class StoryGenApi {
   }
 
   static async createStory(data) {
-    let res = await this.request(`stories/new`, data, "post");
+    let res = await this.request(`stories/${this.username}/new`, data, "post");
     return res.story;
   }
 
   static async createNewChapter(data, storyId) {
     let res = await this.request(
-      `stories/${storyId}/new-chapter`,
+      `stories/${this.username}/${storyId}/new-chapter`,
       data,
       "post"
     );

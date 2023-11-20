@@ -11,7 +11,7 @@ const buildPrompt = (story, user, userInput = null) => {
     moods,
     additionalPrompt,
   } = story;
-  console.log(story);
+
   const { age, gender } = user;
   const getDemographic = (age) => {
     if (age < 6) {
@@ -58,7 +58,7 @@ const buildPrompt = (story, user, userInput = null) => {
   let systemStoryCommand = "Be as creative as you can be. ";
   let systemResponseConfig = `Your response will be strictly ONLY in JSON format. In your response, you will include the text for the new chapter`;
   let systemResponseImg = genImages
-    ? ", a descriptive prompt for an image generator that describes the scene of the chapter (please avoid including characters for the image prompt. Keep the description to just the scenery and other setting details.), "
+    ? ", a very descriptive prompt for an image generator that describes in detail the scene of the chapter, "
     : "";
   let systemResponseConfigSummary = currSummary
     ? "and a short but detailed summary of the chapter with key details. "

@@ -20,8 +20,6 @@ class User extends Model {
       throw new BadRequestError(`Duplicate username: ${info.username}`);
     }
     info.password = await bcrypt.hash(info.password, BCRYPT_WORK_FACTOR);
-    console.log(info.password);
-
     const newUser = await User.create({ ...info, isAdmin: false });
     delete newUser.dataValues.password;
     return newUser;

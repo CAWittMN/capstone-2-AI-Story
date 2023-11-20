@@ -3,9 +3,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  NavbarMenu,
-  NavbarMenuToggle,
-  NavbarMenuItem,
   Button,
 } from "@nextui-org/react";
 import { Link } from "react-router-dom";

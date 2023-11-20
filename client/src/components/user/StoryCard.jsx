@@ -2,14 +2,13 @@ import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 
 const StoryCard = ({ onClick, story, isSelected }) => {
   return (
-    <div onClick={onClick}>
+    <div onClick={onClick} className="m-5 bg-black rounded-3xl bg-opacity-20">
       <Card
         className={
           isSelected
             ? "border-success border border-opacity-70 select-none"
             : "select-none border border-success border-opacity-10"
         }
-        isBlurred
         isHoverable
       >
         <CardHeader>

@@ -7,6 +7,10 @@ const {
   ensureCorrectUser,
   ensureLoggedIn,
 } = require("../middleware/auth");
+const {
+  convertBufferImage,
+  convertBufferAudio,
+} = require("../helpers/convertBuffer");
 const { BadRequestError } = require("../expressError");
 //const jsonschema = require("jsonschema");
 //const storyNewSchema = require("../schemas/storyNew.json");
@@ -14,17 +18,28 @@ const { BadRequestError } = require("../expressError");
 const router = express.Router();
 
 /**
- * GET /:userId => { storyIds: [ storyId, ... ] }
- *
- * Returns list of all user story ids
- *
- * Authorization required: admin or same user-as-:userId
+ * GET /:username => { stories: [ {...story}, {...story}, ...]}
+ * Returns all stories for a user.
+ * Sort by date updated
  */
-router.get("/:userId", ensureCorrectUser, async (req, res, next) => {
-  const { userId } = req.params;
+router.get("/:username", ensureCorrectUser, async (req, res, next) => {
+  const { username } = req.params;
+
   try {
-    const storyIds = await Story.getStoryIds(userId);
-    return res.json({ storyIds });
+    const user = await User.findOne({
+      where: { username },
+    });
+
+    console.log(user);
+
+    const stories = await Story.findAll({
+      where: { UserId: user.id },
+      order: [["updatedAt", "DESC"]],
+    });
+
+    console.log(stories);
+
+    return res.json({ stories });
   } catch (error) {
     return next(error);
   }
@@ -39,9 +54,18 @@ router.get("/:username/:storyId", ensureCorrectUser, async (req, res, next) => {
   const { storyId } = req.params;
   try {
     const story = await Story.findOne({
-      where: { storyId },
+      where: { id: storyId },
       include: { model: Chapter, as: "chapters" },
+      order: [["chapters", "createdAt", "ASC"]],
     });
+    for (let chapter of story.chapters) {
+      if (chapter.img) {
+        chapter.img = await convertBufferImage(chapter.img);
+      }
+      if (chapter.audio) {
+        chapter.audio = await convertBufferAudio(chapter.audio);
+      }
+    }
     return res.json({ story });
   } catch (error) {
     return next(error);
@@ -78,11 +102,18 @@ router.post("/:username/new", ensureCorrectUser, async (req, res, next) => {
       userInput,
       content
     );
+    if (firstChapter.img) {
+      firstChapter.img = await convertBufferImage(firstChapter.img);
+    }
+    if (firstChapter.audio) {
+      firstChapter.audio = await convertBufferAudio(firstChapter.audio);
+    }
+
+    newStory.dataValues.chapters = [firstChapter];
 
     // add first chapter to story
-    newStory.dataValues.chapters = [firstChapter];
-    const story = await newStory.save();
-    return res.status(201).json({ story });
+
+    return res.status(201).json({ story: newStory });
   } catch (error) {
     console.error(error);
     return next(error);
@@ -100,19 +131,15 @@ router.post(
     try {
       const { storyId, username } = req.params;
       const { userPrompt } = req.body;
-      let user = await User.findOne({
+      const user = await User.findOne({
         where: { username },
       });
-      let story = await Story.findOne({
+      const story = await Story.findOne({
         where: { id: storyId },
-        include: User,
+        include: { model: User, as: "user" },
       });
+      const chapter = await Chapter.generateNewChapter(story, user, userPrompt);
       const updatedStory = await story.increment("completedChapters");
-      const chapter = await Chapter.generateNewChapter(
-        updatedStory,
-        user,
-        userPrompt
-      );
       const updateSummary = await updatedStory.update({
         currSummary: updatedStory + " " + chapter.dataValues.newSummary,
       });
@@ -122,6 +149,14 @@ router.post(
           completed: true,
         });
       }
+
+      if (chapter.img) {
+        chapter.img = await convertBufferImage(chapter.img);
+      }
+      if (chapter.audio) {
+        chapter.audio = await convertBufferAudio(chapter.audio);
+      }
+
       return res.status(201).json({ chapter });
     } catch (error) {
       return next(error);

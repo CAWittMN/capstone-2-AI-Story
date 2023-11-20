@@ -16,7 +16,7 @@ const LoadingOverlay = ({ isLoading }) => {
         pointerEvents: isLoading ? "all" : "none",
       }}
     >
-      <CircleLoader color="#fff" />
+      {isLoading && <CircleLoader color="#fff" />}
     </div>
   );
 };

@@ -1,15 +1,16 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import StoryRouter from "./storyRoutes/StoryRouter";
-import UserRouter from "./userRoutes/UserRouter";
-import HomePage from "../../components/home/HomePage";
+import UserHome from "../../components/user/UserHome";
 
-const PrivateRouter = () => {
+const PrivateRouter = ({ username }) => {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/stories/*" element={<StoryRouter />} />
-      <Route path="/users/*" element={<UserRouter />} />
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path="/:username" element={<UserHome />} />
+      <Route
+        path="/:username/stories/*"
+        element={<StoryRouter username={username} />}
+      />
+      <Route path="*" element={<Navigate to={username} />} />
     </Routes>
   );
 };

@@ -29,15 +29,15 @@ class Chapter extends Model {
 
     // if content is null, generate new content
     if (content === null) {
-      console.log("---------------".green, story.currSummary);
       const prompt = buildPrompt(story, user, userInput);
       const response = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo-1106",
+        model: "gpt-4-1106-preview",
         messages: prompt,
         stream: false,
+        response_format: { type: "json_object" },
       });
       console.log("Story generated!------------------------".green);
-      console.log(response.choices[0].text);
+      console.log(response.choices[0].message.content);
       content = JSON.parse(response.choices[0].message.content);
     }
     if (content.validResponse === false) {
@@ -47,6 +47,7 @@ class Chapter extends Model {
     // generate image and audio if story settings allow
     if (story.genImages && story.genAudio) {
       img = await Chapter.generateImageData(content.imgPrompt);
+
       audio = await Chapter.generateAudioData(content.text);
     } else if (story.genAudio && !story.genImages) {
       audio = await Chapter.generateAudio(content.text);
@@ -89,8 +90,8 @@ class Chapter extends Model {
     });
     console.log("Image generated!------------------------".green);
     const img = response.data[0].b64_json;
-    const imgDataUrl = await fetch(`data:image/png;base64,${img}`);
-    const imgBlob = await imgDataUrl.blob();
+
+    const imgBlob = await Buffer.from(img, "base64");
     return imgBlob;
   }
 

@@ -1,40 +1,76 @@
-import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useContext, useState } from "react";
 import AppContext from "../../context/AppContext";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import StoryGenApi from "../../api";
-import ChapterList from "./ChapterList";
+
 import Chapter from "./Chapter";
 import UserInput from "./UserInput";
+import ChapterSelect from "./ChapterSelect";
 
-const StoryPage = ({ story }) => {
-  const { storyId, chapterNum } = useParams();
-  const [currStory, setCurrStory] = useState(story || null);
-  const [currChapter, setCurrChapter] = useState(
-    currStory.chapters[chapterNum - 1] || null
-  );
-
-  const { token } = useContext(AppContext);
+const StoryPage = () => {
+  const { storyId } = useParams();
+  const { handleGetStory, handleCreateNewChapter } = useContext(AppContext);
+  const [currStory, setCurrStory] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [chapters, setChapters] = useState([]);
+  const [currChapterNum, setCurrChapterNum] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function getStory() {
-      try {
-        let story = await StoryGenApi.getStory(storyId);
+    const getStory = async () => {
+      if (!currStory) {
+        setIsLoading(true);
+        let story = await handleGetStory(storyId);
         setCurrStory(story);
-      } catch (errors) {
-        console.error("StoryPage getStory: problem loading", errors);
-        navigate("/");
+        setChapters(story.chapters);
+        setCurrChapterNum(story.chapters.length);
+        setIsLoading(false);
+      } else {
+        setChapters(currStory.chapters);
+        setCurrChapterNum(currStory.chapters.length);
       }
-    }
-    if (!currStory) {
-      getStory();
-    }
-    setCurrChapter(currStory.chapters[chapterNum - 1]);
-  }, [token, storyId]);
+    };
+    getStory();
+  }, []);
 
-  return <div>StoryPage</div>;
+  const createNewChapter = async (data) => {
+    setIsLoading(true);
+    let chapter = await handleCreateNewChapter(data, storyId);
+    setIsLoading(false);
+    setChapters([...chapters, chapter]);
+    setCurrChapterNum(currChapterNum + 1);
+  };
+
+  console.log(currChapterNum);
+  console.log(chapters.length);
+
+  return (
+    <div
+      style={{
+        opacity: isLoading ? 0 : 1,
+        transition: "opacity 0.5s ease-in-out",
+      }}
+    >
+      {currStory && currChapterNum && chapters.length > 0 && (
+        <>
+          <Chapter
+            chapter={chapters[currChapterNum - 1]}
+            className="flex flex-col justify-center items-center fixed "
+          />
+          {currChapterNum == chapters.length ? (
+            <UserInput handleSubmit={createNewChapter} />
+          ) : null}
+          <ChapterSelect
+            numChapters={currStory.maxChapters}
+            completedChapters={chapters.length}
+            currChapterNum={currChapterNum}
+            setCurrChapterNum={setCurrChapterNum}
+          />
+        </>
+      )}
+    </div>
+  );
 };
 
 export default StoryPage;

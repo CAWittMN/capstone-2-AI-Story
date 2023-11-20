@@ -1,6 +1,7 @@
 const axios = require("axios");
 const { ELEVENLABS_API_KEY } = require("./config");
 const { BadRequestError } = require("./expressError");
+const { convertBufferAudio } = require("./helpers/convertBuffer");
 
 const voiceIds = {
   silas: "Af9Ak1Jz1d9LBIyczSKF",
@@ -21,15 +22,13 @@ const getAudio = async (text) => {
     },
     data: {
       text: text,
-      model_id: "eleven_monolingual_v1",
     },
     responseType: "arraybuffer",
   };
 
   const apiResponse = await axios.request(apiRequestOptions);
 
-  const audioBlob = new Blob([apiResponse.data], { type: "audio/mpeg" });
-  return audioBlob;
+  return apiResponse.data;
 };
 
 module.exports = { getAudio };

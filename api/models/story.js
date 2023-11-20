@@ -38,7 +38,6 @@ class Story extends Model {
     });
 
     const content = JSON.parse(response.choices[0].message.content);
-    console.log(content);
 
     // create new story in database
     const newStory = await Story.create({
@@ -119,7 +118,7 @@ Story.init(
     completedChapters: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: 0,
+      defaultValue: 1,
     },
   },
   {

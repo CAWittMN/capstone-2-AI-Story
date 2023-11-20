@@ -1,23 +1,33 @@
 import { useLocation } from "react-router-dom";
 
-import space from "../../images/space.png";
-import forest from "../../images/forest.png";
 import book from "../../images/book.png";
 import room from "../../images/room.png";
-import city from "../../images/city.png";
-import knight from "../../images/knight.png";
-import mountains from "../../images/mountains.png";
-import ship from "../../images/ship.png";
+import blackHole from "../../images/black-hole.png";
 
 const Background = () => {
   const location = useLocation();
 
   const checkPage = (path) => {
-    return location.pathname === path;
+    return location.pathname.includes(path);
   };
 
   return (
     <div>
+      <div
+        style={{
+          backgroundImage: `url(${blackHole})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "blur(2px) brightness(0.5)",
+          backgroundRepeat: "no-repeat",
+          width: "100vw",
+          height: "100vh",
+          position: "fixed",
+          zIndex: "-4",
+          opacity: checkPage("/stories") ? "1" : "0",
+          transition: "all 1s ease",
+        }}
+      ></div>
       <div
         style={{
           backgroundImage: `url(${room})`,

@@ -13,7 +13,6 @@ const useLocalStorage = (key, firstValue = null) => {
     } else {
       localStorage.setItem(key, item);
       StoryGenApi[key] = item;
-      console.log("setting api key", key, "to", item, StoryGenApi[key]);
     }
   }, [key, item]);
 
