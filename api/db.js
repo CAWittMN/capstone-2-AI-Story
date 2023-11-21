@@ -21,4 +21,4 @@ const testConnection = async () => {
 db.sync();
 testConnection();
 
-module.exports = { db };
+module.exports = db;
