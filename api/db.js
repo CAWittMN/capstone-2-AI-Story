@@ -15,7 +15,7 @@ const testConnection = async () => {
   }
 };
 
-db.sync();
+// db.sync();
 testConnection();
 
 module.exports = db;

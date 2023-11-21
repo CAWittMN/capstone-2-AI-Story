@@ -12,9 +12,9 @@ const MaxChaptersInput = ({ onChange, value }) => {
         label="How many chapters would you like to generate?"
         className="w-full"
       >
-        <MaxChapterRadio value={10} />
-        <MaxChapterRadio value={20} />
-        <MaxChapterRadio value={30} />
+        <MaxChapterRadio value={10}>Shorter</MaxChapterRadio>
+        <MaxChapterRadio value={20}>Average</MaxChapterRadio>
+        <MaxChapterRadio value={30}>Longer</MaxChapterRadio>
       </RadioGroup>
     </div>
   );
