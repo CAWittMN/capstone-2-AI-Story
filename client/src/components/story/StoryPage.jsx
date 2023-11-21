@@ -55,9 +55,10 @@ const StoryPage = () => {
             chapter={chapters[currChapterNum - 1]}
             className="flex flex-col justify-center items-center fixed "
           />
-          {currChapterNum == chapters.length ? (
-            <UserInput handleSubmit={createNewChapter} />
-          ) : null}
+          {currChapterNum == chapters.length &&
+            currChapterNum != currStory.maxChapters && (
+              <UserInput handleSubmit={createNewChapter} />
+            )}
           <ChapterSelect
             numChapters={currStory.maxChapters}
             completedChapters={chapters.length}
