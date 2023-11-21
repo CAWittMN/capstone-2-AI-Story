@@ -42,9 +42,6 @@ const StoryPage = () => {
     setCurrChapterNum(currChapterNum + 1);
   };
 
-  console.log(currChapterNum);
-  console.log(chapters.length);
-
   return (
     <div
       style={{

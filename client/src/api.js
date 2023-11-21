@@ -65,7 +65,6 @@ class StoryGenApi {
 
   static async getUserStories() {
     let res = await this.request(`stories/${this.username}`);
-    console.log(res.stories);
     return res.stories;
   }
 

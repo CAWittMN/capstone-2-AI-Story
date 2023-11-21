@@ -32,8 +32,6 @@ router.get("/:username", ensureCorrectUser, async (req, res, next) => {
       order: [["stories", "updatedAt", "DESC"]],
     });
 
-    console.log(user);
-
     return res.json({ stories: user.dataValues.stories });
   } catch (error) {
     return next(error);

@@ -128,7 +128,6 @@ const buildPrompt = (story, user, userInput = null) => {
       content: userPrompt,
     },
   ];
-  console.log(prompt);
   return prompt;
 };
 

@@ -10,7 +10,6 @@ import {
 import AudioComponent from "./AudioComponent";
 
 const Chapter = ({ chapter }) => {
-  console.log(chapter);
   return (
     <div>
       <Card

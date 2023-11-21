@@ -36,8 +36,6 @@ class Chapter extends Model {
         stream: false,
         response_format: { type: "json_object" },
       });
-      console.log("Story generated!------------------------".green);
-      console.log(response.choices[0].message.content);
       content = JSON.parse(response.choices[0].message.content);
     }
     if (content.validResponse === false) {
@@ -80,7 +78,6 @@ class Chapter extends Model {
    * @returns {string}
    */
   static async generateImageData(imgPrompt) {
-    console.log(imgPrompt);
     const response = await openai.images.generate({
       model: "dall-e-3",
       prompt: imgPrompt,
@@ -88,7 +85,6 @@ class Chapter extends Model {
       size: "1024x1024",
       response_format: "b64_json",
     });
-    console.log("Image generated!------------------------".green);
     const img = response.data[0].b64_json;
 
     const imgBlob = await Buffer.from(img, "base64");
@@ -103,8 +99,6 @@ class Chapter extends Model {
    */
   static async generateAudioData(text) {
     const audioData = await getAudio(text);
-    console.log("Audio generated!------------------------".green);
-
     return audioData;
   }
 }

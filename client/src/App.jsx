@@ -164,7 +164,6 @@ const App = () => {
     setIsLoading(true);
     try {
       let stories = await StoryGenApi.getUserStories();
-      console.log(isLoading);
       setIsLoading(false);
       return stories;
     } catch (error) {
