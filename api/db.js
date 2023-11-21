@@ -1,9 +1,6 @@
 const { Sequelize } = require("sequelize");
 const { DB_URI } = require("./config");
 
-// const db = new Sequelize(DB_URI);
-
-// db.sequelize = db;
 console.log("Connecting to database...".cyan);
 const db = new Sequelize("story_gen", "postgres", "admin", {
   dialect: "postgres",
@@ -24,4 +21,4 @@ const testConnection = async () => {
 db.sync();
 testConnection();
 
-module.exports = db;
+module.exports = { db };
