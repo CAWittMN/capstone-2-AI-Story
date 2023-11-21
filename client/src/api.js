@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.REACT_APP_BASE_URL || "http://localhost:3005";
+const BASE_URL =
+  import.meta.env.REACT_APP_BASE_URL || "https://story-gen-api.onrender.com";
 
 /** API Class.
  *
