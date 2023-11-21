@@ -117,8 +117,6 @@ const App = () => {
     loadApi();
     try {
       let story = await StoryGenApi.createStory(data);
-      setStories((stories) => [...stories, story]);
-      setCurrStory(story);
       setIsLoading(false);
       navigate(`/${username}/stories/${story.id}`);
     } catch (error) {

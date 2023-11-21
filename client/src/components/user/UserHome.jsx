@@ -7,7 +7,7 @@ import NewStoryButton from "./NewStoryButton";
 
 const UserHome = () => {
   const navigate = useNavigate();
-  const { username, handleGetStories, setStories, stories, setCurrStoryId } =
+  const { username, handleGetStories, stories, setStories } =
     useContext(AppContext);
   const [selectedStory, setSelectedStory] = useState(stories[0] || null);
 
