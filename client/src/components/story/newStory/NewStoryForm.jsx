@@ -75,14 +75,13 @@ const NewStoryForm = ({ onSubmit }) => {
   ];
 
   return (
-    <div className="NewStoryForm">
-      <h1>New Story</h1>
-      <form onSubmit={handleSubmitInput}>
+    <div className="NewStoryForm flex justify-center w-[40vw] border p-4 rounded-3xl backdrop-blur-lg backdrop-brightness-50">
+      <form onSubmit={handleSubmitInput} className="w-3/4">
         {inputs[inputIdx]}
         <Button
           variant="ghost"
           type="button"
-          color="danger"
+          color="secondary"
           isDisabled={inputIdx === 0}
           onClick={() => setInputIdx((idx) => idx - 1)}
         >

@@ -11,7 +11,11 @@ import AudioComponent from "./AudioComponent";
 
 const Chapter = ({ chapter }) => {
   return (
-    <div>
+    <div
+      style={{
+        fontFamily: "alice",
+      }}
+    >
       <Card
         isBlurred
         shadow="lg"

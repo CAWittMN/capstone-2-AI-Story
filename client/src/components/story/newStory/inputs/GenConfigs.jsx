@@ -21,6 +21,7 @@ const GenConfigs = ({ onChange, genImagesVal, genAudioVal }) => {
       >
         Generate Speech
       </Switch>
+      <p>*Enabling will increase load times</p>
     </div>
   );
 };

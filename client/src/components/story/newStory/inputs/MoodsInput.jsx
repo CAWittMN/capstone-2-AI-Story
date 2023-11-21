@@ -38,6 +38,7 @@ const MoodsInput = ({ onChange, values }) => {
       name="moods"
       label={mood}
       isSelected={values.includes(mood)}
+      className="m-3"
     >
       {mood}
     </Checkbox>

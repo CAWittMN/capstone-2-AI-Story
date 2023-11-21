@@ -9,8 +9,9 @@ const MaxChaptersInput = ({ onChange, value }) => {
         value={value}
         onValueChange={onChange}
         name="maxChapters"
-        label="How many chapters would you like to generate?"
+        label="How long would you like the story to be?"
         className="w-full"
+        description="This will set the number of chapters in your story. Shorter: 10, Average: 20, Longer: 30"
       >
         <MaxChapterRadio value={10}>Shorter</MaxChapterRadio>
         <MaxChapterRadio value={20}>Average</MaxChapterRadio>

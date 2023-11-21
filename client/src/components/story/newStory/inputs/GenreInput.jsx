@@ -11,6 +11,7 @@ const GenreInput = ({ onChange, value }) => {
         placeholder="What is your favorite genre?"
         isRequired
         className="w-full"
+        description="This will set the genre of your story. Examples: Fantasy, Sci-Fi, Romance, etc."
       />
     </div>
   );
