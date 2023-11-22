@@ -44,10 +44,10 @@ class Chapter extends Model {
 
     // generate image and audio if story settings allow
     if (story.genImages && story.genAudio) {
-      img = await Chapter.generateImageData(content.imgPrompt);
+      img = await Chapter.generateImage(content.imgPrompt);
 
-      audio = await Chapter.generateAudioData(content.text);
-    } else if (story.genAudio && !story.genImages) {
+      audio = await Chapter.generateAudio(content.text);
+    } else if (story.genAudio && !story.genImage) {
       audio = await Chapter.generateAudio(content.text);
       img = null;
     } else if (!story.genAudio && story.genImages) {
@@ -77,7 +77,7 @@ class Chapter extends Model {
    *
    * @returns {string}
    */
-  static async generateImageData(imgPrompt) {
+  static async generateImage(imgPrompt) {
     const response = await openai.images.generate({
       model: "dall-e-3",
       prompt: imgPrompt,
@@ -97,7 +97,7 @@ class Chapter extends Model {
    *
    * @returns {string}
    */
-  static async generateAudioData(text) {
+  static async generateAudio(text) {
     const audioData = await getAudio(text);
     return audioData;
   }
