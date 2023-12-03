@@ -134,7 +134,9 @@ router.post(
 
       const updatedStory = await story.increment("completedChapters");
       const updateSummary = await updatedStory.update({
-        currSummary: updatedStory + " " + chapter.dataValues.newSummary,
+        completed: story.maxChapters === updatedStory.completedChapters,
+        currSummary:
+          updatedStory.currSummary + " " + chapter.dataValues.newSummary,
       });
       if (chapter.charAlive === false) {
         const updateCharAlive = await updatedStory.update({

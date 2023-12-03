@@ -36,7 +36,7 @@ class ElevenLabsApi {
 }
 
 const elevenLabsApi = new ElevenLabsApi({
-  voiceId: voiceIds.silas,
+  voiceId: voiceIds.narrator,
   apiKey: ELEVENLABS_API_KEY,
 });
 
