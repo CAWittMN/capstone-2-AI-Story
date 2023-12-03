@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { Input } from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const INITIAL_STATE = {
   userPrompt: "",
 };
 
-const UserInput = ({ handleSubmit }) => {
+const UserInput = ({ handleSubmit, isDisabled, userPrompt }) => {
   const [inputData, setInputData] = useState(INITIAL_STATE);
   return (
-    <div className="flex  flex-col items-center">
+    <div className="flex text-white w-[95%]  flex-col items-center">
       <form
+        className="w-full"
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit(inputData);
@@ -18,9 +17,14 @@ const UserInput = ({ handleSubmit }) => {
         }}
       >
         <Input
-          className="w-full"
+          name="userPrompt"
+          classNames={{
+            input: "text-center",
+          }}
+          disabled={isDisabled}
           placeholder="What happens next?"
-          value={inputData.userPrompt}
+          // disabled={userPrompt ? true : false}
+          // value={userPrompt ? userPrompt : inputData.userPrompt}
           variant="faded"
           onChange={(e) =>
             setInputData({ ...inputData, userPrompt: e.target.value })

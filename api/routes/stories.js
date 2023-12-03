@@ -2,11 +2,7 @@ const express = require("express");
 const Story = require("../models/story");
 const Chapter = require("../models/chapter");
 const User = require("../models/user");
-const {
-  ensureAdmin,
-  ensureCorrectUser,
-  ensureLoggedIn,
-} = require("../middleware/auth");
+const { ensureAdmin, ensureCorrectUser } = require("../middleware/auth");
 const {
   convertBufferImage,
   convertBufferAudio,
@@ -132,6 +128,10 @@ router.post(
         include: { model: User, as: "user" },
       });
       const chapter = await Chapter.generateNewChapter(story, user, userPrompt);
+      if (chapter.validResponse === false) {
+        return res.status(201).json({ chapter });
+      }
+
       const updatedStory = await story.increment("completedChapters");
       const updateSummary = await updatedStory.update({
         currSummary: updatedStory + " " + chapter.dataValues.newSummary,

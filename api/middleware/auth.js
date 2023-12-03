@@ -26,9 +26,12 @@ const authenticateJWT = (req, res, next) => {
   }
 };
 
-/** Middleware to use when they must be logged in.
+/** Middleware: Ensure user is logged in.
  *
- * If not, raises Unauthorized.
+ * If a request has res.locals.user, the user is logged in, so allow
+ * the next function to continue.
+ *
+ * If not, raise UnauthorizedError
  */
 const ensureLoggedIn = (req, res, next) => {
   try {
@@ -39,9 +42,12 @@ const ensureLoggedIn = (req, res, next) => {
   }
 };
 
-/** Middlware to use when they must be admins
+/** Middleware: Ensure user is admin.
  *
- * If not, raises Unauthorized
+ * If a request has res.locals.user and isAdmin is true, the user is admin, so allow
+ * the next function to continue.
+ *
+ * If not, raise UnauthorizedError
  */
 const ensureAdmin = (req, res, next) => {
   try {
@@ -54,7 +60,12 @@ const ensureAdmin = (req, res, next) => {
   }
 };
 
-/** Middleware for ensuring the user is the owner
+/** Middleware: Ensure user is admin or correct user.
+ *
+ * If a request username param matches the username in res.locals.user, the user is correct, so allow
+ * the next function to continue. Continue if user is admin regardless of username param.
+ *
+ * If not, raise UnauthorizedError
  */
 const ensureCorrectUser = (req, res, next) => {
   try {

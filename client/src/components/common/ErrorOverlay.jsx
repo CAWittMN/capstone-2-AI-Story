@@ -17,17 +17,17 @@ const ErrorOverlay = ({ error, setError }) => {
           pointerEvents: error ? "all" : "none",
         }}
       >
-        <div>
+        <div className="m-5 md:max-w-[50%]">
           {error && (
             <>
-              <h1 className="text-2xl border border-warning select-none text-white">
+              <h1 className="text-2xl p-5 no-scrollbar overflow-scroll rounded-3xl border border-warning select-none text-white">
                 {error}
               </h1>
               <Button
                 variant="flat"
                 color="warning"
                 onClick={() => setError(null)}
-                className="mt-3"
+                className="mt-3 w-full"
               >
                 Dismiss
               </Button>

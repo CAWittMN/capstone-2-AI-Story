@@ -45,8 +45,7 @@ library.add(
 
 /**
  * Main App Component.
- * controls App context of token, username, loading and error state, and stories list
- *
+ * controls App context of token, username, loading and error state, and users stories
  */
 const App = () => {
   const [token, setToken] = useLocalStorage("token");
@@ -56,6 +55,9 @@ const App = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  /**
+   * Load fonts and api on mount
+   */
   useEffect(() => {
     WebFont.load({
       google: {
@@ -67,12 +69,21 @@ const App = () => {
     }
   }, [token, username]);
 
+  /**
+   * Load token and username into api
+   * if they are not already loaded
+   */
   const loadApi = () => {
     if (!StoryGenApi.token || !StoryGenApi.username) {
       StoryGenApi.loadToken(token, username);
     }
   };
 
+  /**
+   * Global logout function
+   * clears token, username, and stories
+   * and logs out of api
+   */
   const handleLogout = () => {
     setToken(null);
     setUsername(null);
@@ -80,6 +91,12 @@ const App = () => {
     StoryGenApi.logout();
   };
 
+  /**
+   * Global login function
+   * sets token and username
+   * sets api token and username
+   * and navigates to user home
+   */
   const handleLogin = async (data) => {
     setIsLoading(true);
     try {
@@ -88,6 +105,7 @@ const App = () => {
       setUsername(username);
       setToken(token);
       setIsLoading(false);
+      loadApi();
       navigate(`/${username}`);
     } catch (error) {
       console.error("Login failed", error);
@@ -96,6 +114,13 @@ const App = () => {
     }
   };
 
+  /**
+   * Global signup function
+   * registers new user
+   * sets token and username
+   * sets api token and username
+   * and navigates to user home
+   */
   const handleSignup = async (data) => {
     setIsLoading(true);
     try {
@@ -112,6 +137,10 @@ const App = () => {
     }
   };
 
+  /**
+   * Global create story function
+   * creates new story
+   */
   const handleCreateStory = async (data) => {
     setIsLoading(true);
     loadApi();
@@ -127,13 +156,20 @@ const App = () => {
     }
   };
 
+  /**
+   * Global create chapter function
+   * creates new chapter
+   */
   const handleCreateNewChapter = async (data, storyId) => {
     setIsLoading(true);
     loadApi();
     try {
-      let chapter = await StoryGenApi.createNewChapter(data, storyId);
+      let newChapter = await StoryGenApi.createNewChapter(data, storyId);
       setIsLoading(false);
-      return chapter;
+      if (newChapter.validResponse === false) {
+        setError(newChapter.message);
+      }
+      return newChapter;
     } catch (error) {
       setError(error);
       setIsLoading(false);
@@ -190,7 +226,9 @@ const App = () => {
       <LoadingOverlay isLoading={isLoading} />
       <ErrorOverlay error={error} setError={setError} />
       <StoryNavbar isLoggedIn={token ? true : false} logout={handleLogout} />
-      <Router isLoggedIn={token ? true : false} username={username} />
+      <div className="container m-auto">
+        <Router isLoggedIn={token ? true : false} username={username} />
+      </div>
     </AppContext.Provider>
   );
 };

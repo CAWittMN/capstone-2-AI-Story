@@ -1,3 +1,6 @@
+/**
+ * Dynamically builds a prompt based on the story, story configuration, user info, and user input.
+ */
 const buildPrompt = (story, user, userInput = null) => {
   const {
     title,
@@ -13,6 +16,8 @@ const buildPrompt = (story, user, userInput = null) => {
   } = story;
 
   const { age, gender } = user;
+
+  // helper function to get demographic based on age
   const getDemographic = (age) => {
     if (age < 6) {
       return "toddlers";
@@ -107,7 +112,7 @@ const buildPrompt = (story, user, userInput = null) => {
         systemStoryConfig +
         systemStoryCompletedSoFar +
         systemStorySummary +
-        "The chapter should be around 200 words. " +
+        "The chapter should be around 130 words. " +
         systemStoryCommand +
         systemResponseConfig +
         systemResponseImg +

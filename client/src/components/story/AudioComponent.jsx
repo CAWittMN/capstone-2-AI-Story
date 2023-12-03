@@ -5,8 +5,10 @@ const AudioComponent = ({ audioData }) => {
   const sourceUrl = audioData;
 
   return (
-    <div className="ml-5">
-      {sourceUrl && <audio controls src={sourceUrl}></audio>}
+    <div className="">
+      {sourceUrl && (
+        <audio controls className="h-10 m-auto" src={sourceUrl}></audio>
+      )}
     </div>
   );
 };

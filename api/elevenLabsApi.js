@@ -1,7 +1,5 @@
 const axios = require("axios");
 const { ELEVENLABS_API_KEY } = require("./config");
-const { BadRequestError } = require("./expressError");
-const { convertBufferAudio } = require("./helpers/convertBuffer");
 
 const voiceIds = {
   silas: "Af9Ak1Jz1d9LBIyczSKF",
@@ -9,26 +7,37 @@ const voiceIds = {
   oldBrit: "wH5kCXzyKeKf3AAnmP5L",
 };
 
-const getAudio = async (text) => {
-  const apiKey = ELEVENLABS_API_KEY;
-  const voiceId = voiceIds.narrator;
-  const apiRequestOptions = {
-    method: "POST",
-    url: `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
-    headers: {
-      accept: "audio/mpeg",
-      "content-Type": "application/json",
-      "xi-api-key": apiKey,
-    },
-    data: {
-      text: text,
-    },
-    responseType: "arraybuffer",
-  };
+class ElevenLabsApi {
+  constructor(configs = {}) {
+    this.voiceId = configs.voiceId;
 
-  const apiResponse = await axios.request(apiRequestOptions);
+    this.apiKey = configs.apiKey;
+  }
 
-  return apiResponse.data;
-};
+  async getAudio(text) {
+    const apiRequestOptions = {
+      method: "POST",
+      url: `https://api.elevenlabs.io/v1/text-to-speech/${this.voiceId}`,
+      headers: {
+        accept: "audio/mpeg",
+        "content-Type": "application/json",
+        "xi-api-key": this.apiKey,
+      },
+      data: {
+        text: text,
+      },
+      responseType: "arraybuffer",
+    };
 
-module.exports = { getAudio };
+    const apiResponse = await axios.request(apiRequestOptions);
+
+    return apiResponse.data;
+  }
+}
+
+const elevenLabsApi = new ElevenLabsApi({
+  voiceId: voiceIds.silas,
+  apiKey: ELEVENLABS_API_KEY,
+});
+
+module.exports = { elevenLabsApi };
