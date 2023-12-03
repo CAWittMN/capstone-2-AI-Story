@@ -6,7 +6,7 @@ const NewStoryFormPage = () => {
   const { handleCreateStory } = useContext(AppContext);
 
   return (
-    <div className="NewStoryFormPage flex absolute h-full items-center justify-center align-center inset-0">
+    <div className="NewStoryFormPage flex h-[90vh] items-center justify-center align-center inset-0">
       <NewStoryForm onSubmit={handleCreateStory} />
     </div>
   );

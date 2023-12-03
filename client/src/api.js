@@ -92,6 +92,15 @@ class StoryGenApi {
     );
     return res.chapter;
   }
+
+  static async deleteStory(storyId) {
+    let res = await this.request(
+      `stories/${this.username}/${storyId}`,
+      {},
+      "delete"
+    );
+    return res;
+  }
 }
 
 export default StoryGenApi;

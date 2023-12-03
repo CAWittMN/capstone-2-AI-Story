@@ -15,7 +15,7 @@ const NewStoryButton = ({ username }) => {
         onClick={() => navigate(`/${username}/stories/new`)}
         variant="flat"
         color="warning"
-        className="backdrop-blur-sm text-2xl h-20 w-full text-white border border-warning border-opacity-20"
+        className="backdrop-blur-sm backdrop-brightness-[70%] text-2xl h-20 w-full text-white border border-warning border-opacity-20"
       >
         <FontAwesomeIcon icon="fa-book-medical" />
         New Story

@@ -17,12 +17,16 @@ const StoryNavbar = ({ isLoggedIn, logout }) => {
         <Link to="/">
           <img className="rounded-lg" src={logo} alt="logo" />
         </Link>
-        <h3
-          className=" ml-3 text-white select-none opacity-80 text-2xl font-bold"
-          style={{ fontFamily: "Lora" }}
-        >
-          Story Gen
-        </h3>
+        {isLoggedIn && (
+          <Link to="/">
+            <h3
+              className=" ml-3 text-white select-none border px-3 py-1 rounded-xl opacity-80 text-xl font-bold"
+              style={{ fontFamily: "Lora" }}
+            >
+              Stories
+            </h3>
+          </Link>
+        )}
       </NavbarBrand>
       {!isLoggedIn ? (
         <NavbarContent justify="end">

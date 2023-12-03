@@ -8,8 +8,10 @@ const SettingInput = ({ onChange, value }) => {
         onChange={onChange}
         name="setting"
         label="Setting"
-        placeholder="Where does the story take place?"
         className="w-full"
+        classNames={{
+          description: "text-white",
+        }}
         description="Leave blank for a random setting. Examples: A spooky forest, London in the 1800s, etc."
       />
     </div>

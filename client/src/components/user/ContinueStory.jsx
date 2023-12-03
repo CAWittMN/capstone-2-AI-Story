@@ -4,30 +4,54 @@ import {
   CardBody,
   CardHeader,
   CardFooter,
+  ScrollShadow,
   Button,
 } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const ContinueStory = ({ username, story, onContinue }) => {
+const ContinueStory = ({ story, onContinue }) => {
   return (
-    <div>
+    <div className="md:w-[75%] m-auto">
       <Card
         isBlurred
-        className="border-success select-none border border-opacity-70"
+        className="border-success w-full select-none border border-opacity-70 backdrop-brightness-[60%]"
       >
-        <CardHeader>
+        <CardHeader className="flex flex-row justify-between">
           <span>{story.title}</span>
+          <span className="flex flex-row border border-primary backdrop-brightness-90 px-3 py-1 rounded-xl ">
+            <FontAwesomeIcon icon="person-walking" />
+            {story.charName}
+          </span>
         </CardHeader>
         <Divider />
-        <CardBody>{story.title}</CardBody>
-        <CardFooter>
-          <div className="absolute bottom-0 left-0 m-2">
+        <CardBody className="h-[12rem] overflow-scroll ">
+          <ScrollShadow>
+            <div>
+              <h1>Genre: {story.genre}</h1>
+              <h1>Setting: {story.setting}</h1>
+            </div>
+            <Divider />
+            <div>Summary: {story.currSummary}</div>
+          </ScrollShadow>
+        </CardBody>
+        <CardFooter className="flex flex-row justify-between">
+          <div className="">
             <span>
-              <FontAwesomeIcon icon="fa-book" />
+              <FontAwesomeIcon icon="fa-book" className="mx-1" />
               {story.completedChapters}/{story.maxChapters}
             </span>
           </div>
-          <div className="absolute bottom-0 right-0 m-2">
+          <div>
+            <span>
+              {story.charAlive === false && (
+                <FontAwesomeIcon icon="fa-skull-crossbones" />
+              )}
+            </span>
+            <span>
+              {story.completed && <FontAwesomeIcon icon="fa-check-circle" />}
+            </span>
+          </div>
+          <div className="flex w-[80%] md:w-[90%] space-x-3 border border-warning rounded-xl px-3 border-opacity-30 justify-end">
             <span>
               <FontAwesomeIcon
                 icon={story.genImages ? "fa-eye" : "fa-eye-slash"}
@@ -47,10 +71,10 @@ const ContinueStory = ({ username, story, onContinue }) => {
           onClick={onContinue}
           variant="ghost"
           color="warning"
-          className="backdrop-blur-sm text-white"
+          className="backdrop-blur-sm backdrop-brightness-75 w-full text-white"
           isDisabled={story.completed}
         >
-          Continue
+          {story.completed ? "Review" : "Continue"}
         </Button>
       </div>
     </div>

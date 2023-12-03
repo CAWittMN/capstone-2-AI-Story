@@ -59,6 +59,9 @@ const LoginForm = () => {
           <Input
             type="password"
             label="Password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
             isClearable
             onClear={() => setFormData({ ...formData, password: "" })}
             radius="lg"
@@ -84,9 +87,6 @@ const LoginForm = () => {
                 "!cursor-text",
               ],
             }}
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
             isRequired
           />
         </div>

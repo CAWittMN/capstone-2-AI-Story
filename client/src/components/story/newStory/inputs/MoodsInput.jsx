@@ -38,13 +38,17 @@ const MoodsInput = ({ onChange, values }) => {
       name="moods"
       label={mood}
       isSelected={values.includes(mood)}
-      className="m-3"
+      className="my-1 md:m-3 border-2 border-warning border-opacity-30 rounded-xl"
     >
       {mood}
     </Checkbox>
   ));
 
-  return <div className="MoodsInput">{checkBoxes}</div>;
+  return (
+    <div className="flex flex-col md:flex-row md:flex-wrap items-center h-[75vh] overflow-y-scroll">
+      {checkBoxes}
+    </div>
+  );
 };
 
 export default MoodsInput;

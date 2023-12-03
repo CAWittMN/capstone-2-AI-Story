@@ -51,8 +51,13 @@ const StoryPage = () => {
             <Chapter chapter={chapters[currChapterNum - 1]} className="" />
 
             <UserInput
+              isInvisible={currStory.maxChapters === currChapterNum}
               isDisabled={chapters.length != currChapterNum}
-              userPrompt={chapters[currChapterNum - 1].userPrompt}
+              userPrompt={
+                chapters[currChapterNum]
+                  ? chapters[currChapterNum].userPrompt
+                  : null
+              }
               handleSubmit={createNewChapter}
             />
           </div>

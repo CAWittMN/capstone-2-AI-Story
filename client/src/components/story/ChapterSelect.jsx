@@ -34,9 +34,9 @@ const ChapterSelect = ({
   }
 
   return (
-    <div className="container no-scrollbar overflow-x-scroll fixed bottom-0 ">
+    <div className="container h-[3.75rem] no-scrollbar overflow-x-scroll fixed bottom-0 ">
       <Tabs
-        className="backdrop-blur-lg border-t border-warning border-opacity-50 shadow-xl rounded-t-full px-5"
+        className="backdrop-blur-lg border-t  border-warning border-opacity-50 shadow-xl rounded-t-full px-5"
         selectedKey={currChapterNum.toString()}
         disabledKeys={disabledKeys}
         onSelectionChange={(val) => {

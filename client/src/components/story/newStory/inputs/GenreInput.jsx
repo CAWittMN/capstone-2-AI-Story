@@ -4,6 +4,9 @@ const GenreInput = ({ onChange, value }) => {
   return (
     <div className="GenreInput">
       <Input
+        classNames={{
+          description: "text-white",
+        }}
         value={value}
         onChange={onChange}
         name="genre"

@@ -30,6 +30,7 @@ import {
   faBook,
   faLock,
   faBookMedical,
+  faSkullCrossbones,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -40,7 +41,8 @@ library.add(
   faVolumeXmark,
   faBookMedical,
   faBook,
-  faLock
+  faLock,
+  faSkullCrossbones
 );
 
 /**
@@ -50,7 +52,6 @@ library.add(
 const App = () => {
   const [token, setToken] = useLocalStorage("token");
   const [username, setUsername] = useLocalStorage("username");
-  const [stories, setStories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -81,13 +82,12 @@ const App = () => {
 
   /**
    * Global logout function
-   * clears token, username, and stories
+   * clears token, username
    * and logs out of api
    */
   const handleLogout = () => {
     setToken(null);
     setUsername(null);
-    setStories([]);
     StoryGenApi.logout();
   };
 
@@ -147,6 +147,7 @@ const App = () => {
     try {
       let story = await StoryGenApi.createStory(data);
       setIsLoading(false);
+      setStories([story, ...stories]);
       navigate(`/${username}/stories/${story.id}`);
     } catch (error) {
       setIsLoading(false);
@@ -210,10 +211,7 @@ const App = () => {
   return (
     <AppContext.Provider
       value={{
-        username,
-        token,
-        stories,
-        setStories,
+        isLoading,
         handleLogin,
         handleSignup,
         handleCreateStory,

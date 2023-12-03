@@ -2,7 +2,7 @@ import Header from "./Header";
 
 const HomePage = () => {
   return (
-    <div style={{ fontFamily: "alice" }}>
+    <div className="h-[75vh] flex items-center" style={{ fontFamily: "alice" }}>
       <Header />
     </div>
   );

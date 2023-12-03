@@ -1,12 +1,11 @@
 const Header = () => {
   return (
-    <div className="h-100 p-20">
+    <div className="w-full  backdrop-blur-md rounded-full backdrop-brightness-[65%]">
       <h1
-        className="m-auto text-4xl select-none text-center mt-20 mx-20"
+        className="m-auto w-full text-[4.5rem] md:text-[8rem] select-none text-center "
         style={{
           fontFamily: "Alice",
           fontWeight: "bold",
-          fontSize: "8rem",
         }}
       >
         <span

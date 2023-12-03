@@ -7,8 +7,8 @@ import NewStoryButton from "./NewStoryButton";
 
 const UserHome = () => {
   const navigate = useNavigate();
-  const { username, handleGetStories, stories, setStories } =
-    useContext(AppContext);
+  const [stories, setStories] = useState([]);
+  const { username, handleGetStories } = useContext(AppContext);
   const [selectedStory, setSelectedStory] = useState(stories[0] || null);
 
   useEffect(() => {
@@ -26,19 +26,19 @@ const UserHome = () => {
 
   return (
     <div style={{ fontFamily: "alice" }}>
-      <div className="container flex-row flex">
-        <div className="overflow-y-scroll backdrop-brightness-75 backdrop-blur-sm h-[93vh] fixed w-1/4 max-w-[300px] ">
+      <div className="container select-none flex h-[90vh] flex-col-reverse items-center md:flex-row justify-start md:justify-center">
+        <div className="backdrop-brightness-75 backdrop-blur-sm w-screen md:w-1/4">
           <StoryList
             selectedStory={selectedStory}
             select={setSelectedStory}
             stories={stories}
           />
         </div>
-        <div className="fixed flex h-full items-center justify-center align-center right-0 w-3/4">
-          <div className="absolute top-10">
+        <div className="flex flex-col h-full md:justify-center gap-10  mt-5 md:m-0 items-center align-center right-0 w-3/4">
+          <div className="top-10">
             <NewStoryButton username={username} />
           </div>
-          <div>
+          <div className="w-full">
             {stories.length > 0 && (
               <ContinueStory
                 username={username}

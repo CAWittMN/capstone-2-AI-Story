@@ -8,9 +8,11 @@ const CharNameInput = ({ onChange, value }) => {
         onChange={onChange}
         name="charName"
         label="Character Name"
-        placeholder="Enter a name for the main character"
         isRequired
         className="w-full"
+        classNames={{
+          description: "text-white",
+        }}
         description="This will set the name of the main character. Examples: John, Jane, etc."
       />
     </div>
