@@ -147,7 +147,6 @@ const App = () => {
     try {
       let story = await StoryGenApi.createStory(data);
       setIsLoading(false);
-      setStories([story, ...stories]);
       navigate(`/${username}/stories/${story.id}`);
     } catch (error) {
       setIsLoading(false);
@@ -212,6 +211,7 @@ const App = () => {
     <AppContext.Provider
       value={{
         isLoading,
+        username,
         handleLogin,
         handleSignup,
         handleCreateStory,

@@ -72,7 +72,6 @@ const ContinueStory = ({ story, onContinue }) => {
           variant="ghost"
           color="warning"
           className="backdrop-blur-sm backdrop-brightness-75 w-full text-white"
-          isDisabled={story.completed}
         >
           {story.completed ? "Review" : "Continue"}
         </Button>

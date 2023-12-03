@@ -52,7 +52,7 @@ const StoryPage = () => {
 
             <UserInput
               isInvisible={currStory.maxChapters === currChapterNum}
-              isDisabled={chapters.length != currChapterNum}
+              isDisabled={story.completed || chapters.length != currChapterNum}
               userPrompt={
                 chapters[currChapterNum]
                   ? chapters[currChapterNum].userPrompt
