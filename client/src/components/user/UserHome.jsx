@@ -26,7 +26,7 @@ const UserHome = () => {
 
   return (
     <div style={{ fontFamily: "alice" }}>
-      <div className="container select-none flex h-[90vh] flex-col-reverse items-center md:flex-row justify-start md:justify-center">
+      <div className="container select-none flex h-[86vh] flex-col-reverse items-center md:flex-row justify-start md:justify-center">
         <div className="backdrop-brightness-75 backdrop-blur-sm w-screen md:w-1/4">
           <StoryList
             selectedStory={selectedStory}
@@ -34,7 +34,7 @@ const UserHome = () => {
             stories={stories}
           />
         </div>
-        <div className="flex flex-col h-full md:justify-center gap-10  mt-5 md:m-0 items-center align-center right-0 w-3/4">
+        <div className="flex flex-col h-full md:justify-center gap-3  mt-5 md:m-0 items-center align-center right-0 w-3/4">
           <div className="top-10">
             <NewStoryButton username={username} />
           </div>
