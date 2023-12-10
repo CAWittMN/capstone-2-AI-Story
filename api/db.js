@@ -14,7 +14,7 @@ const testConnection = async () => {
   }
 };
 
-//db.sync(); // uncomment to initiate the database tables
+db.sync(); // uncomment to initiate the database tables
 testConnection();
 
 module.exports = db;
