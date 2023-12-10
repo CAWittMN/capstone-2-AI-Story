@@ -64,7 +64,6 @@ const StoryPage = () => {
               handleSubmit={createNewChapter}
             />
           </div>
-
           <ChapterSelect
             numChapters={currStory.maxChapters}
             completedChapters={chapters.length}
