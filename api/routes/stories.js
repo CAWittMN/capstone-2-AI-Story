@@ -70,6 +70,8 @@ router.get("/:username/:storyId", ensureCorrectUser, async (req, res, next) => {
  * Authorization required: admin or same user-as-:username
  */
 router.post("/:username/new", ensureCorrectUser, async (req, res, next) => {
+  // convert moods to string
+  req.body.moods = req.body.moods.join(", ");
   // validate input schema
   try {
     const validator = jsonschema.validate(req.body, newStorySchema);

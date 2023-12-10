@@ -17,7 +17,6 @@ class Story extends Model {
    * Creates a new story instance and content for the first chapter.
    */
   static async generateNewStory(info, userID) {
-    info.moods = info.moods.join(", "); // convert moods to string
     // generate content
     const prompt = buildPrompt(info);
     const response = await openai.chat.completions.create({
