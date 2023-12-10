@@ -1,7 +1,7 @@
 /**
  * Dynamically builds a prompt based on the story, story configuration, user info, and user input.
  */
-const buildPrompt = (story, user, userInput = null) => {
+const buildPrompt = (story, userInput = null) => {
   const {
     title,
     genImages,
@@ -9,42 +9,27 @@ const buildPrompt = (story, user, userInput = null) => {
     completedChapters,
     currSummary,
     genre,
+    demographic,
     setting,
     charName,
+    charInfo,
     moods,
     additionalPrompt,
   } = story;
 
-  const { age, gender } = user;
-
-  // helper function to get demographic based on age
-  const getDemographic = (age) => {
-    if (age < 6) {
-      return "toddlers";
-    } else if (age < 13) {
-      return "children";
-    } else if (age < 18) {
-      return "young adults";
-    } else {
-      return "adults";
-    }
-  };
-
   let systemMessage =
-    "You will be generating a chapter for a story. Each chapter you generate is based off input from the user. ";
+    "You will be generating a chapter for a story. Each chapter you generate will use the users input which is a response to the previous chapter. ";
   let systemStoryDescriptionStart =
     "The story you will be generating chapters for ";
   let systemStoryDescriptionTitle = title ? `is titled "${title} and ` : "";
-  let systemStoryDescriptionEnd = `is a high quality ${moods} ${genre} story for ${getDemographic(
-    age
-  )}`;
+  let systemStoryDescriptionEnd = `is a high quality ${moods} ${genre} story for ${demographic}`;
   let systemStoryDescriptionSetting = setting
     ? ` that takes place in ${setting}. `
     : " that takes place in a setting (ancient Rome, outer space, a mysterious forest, a bank robbery, ect.) of your choice. Be creative. ";
   let systemStoryDescriptionAdditional = additionalPrompt
     ? additionalPrompt
     : " ";
-  let systemCharacterDescription = `The main character is a ${gender} named ${charName}. `;
+  let systemCharacterDescription = `The main character is a ${charInfo}} named ${charName}. `;
   let systemStoryConfig = `The story will have a total of ${maxChapters} chapters. `;
   let systemStoryCompletedSoFar =
     completedChapters > 0
@@ -85,10 +70,7 @@ const buildPrompt = (story, user, userInput = null) => {
     completedChapters === 0 ? "" : "charAlive: true/false, ";
   let systemResponseFormatText = "text: 'chapter text', ";
   let systemResponseFormatImg = genImages ? "imgPrompt: 'image prompt', " : "";
-  let systemResponseFormatSummary =
-    completedChapters > 0
-      ? "summary: 'new story summary' } "
-      : "summary: 'chapter summary' }";
+  let systemResponseFormatSummary = "summary: 'chapter summary' }";
   let systemEnd =
     completedChapters > 0 ? " The user will now provide their response." : "";
   if (completedChapters === maxChapters - 1) {

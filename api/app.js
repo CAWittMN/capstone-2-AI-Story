@@ -10,15 +10,18 @@ const storiesRoutes = require("./routes/stories.js");
 
 const app = express();
 
+// middleware
 app.use(cors());
 app.use(express.json());
 app.use(authenticateJWT);
 app.use(morgan("tiny"));
 
+// routes
 app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
 app.use("/stories", storiesRoutes);
 
+// 404 handler
 app.use(function (req, res, next) {
   return next(new NotFoundError());
 });

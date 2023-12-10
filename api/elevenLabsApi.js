@@ -1,12 +1,12 @@
 const axios = require("axios");
-const { ELEVENLABS_API_KEY } = require("./config");
+const { ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID } = require("./config");
 
-const voiceIds = {
-  silas: "Af9Ak1Jz1d9LBIyczSKF",
-  narrator: "ghWIe9V8UUJG9QUcMI3V",
-  oldBrit: "wH5kCXzyKeKf3AAnmP5L",
-};
-
+/**
+ * ElevenLabs API Wrapper
+ * Configs:
+ * - voiceId: ID string
+ * - apiKey: API Key string
+ */
 class ElevenLabsApi {
   constructor(configs = {}) {
     this.voiceId = configs.voiceId;
@@ -14,6 +14,9 @@ class ElevenLabsApi {
     this.apiKey = configs.apiKey;
   }
 
+  /**
+   * Convert text to audio.
+   */
   async getAudio(text) {
     const apiRequestOptions = {
       method: "POST",
@@ -35,8 +38,9 @@ class ElevenLabsApi {
   }
 }
 
+// create instance of ElevenLabsApi
 const elevenLabsApi = new ElevenLabsApi({
-  voiceId: voiceIds.narrator,
+  voiceId: ELEVENLABS_VOICE_ID,
   apiKey: ELEVENLABS_API_KEY,
 });
 

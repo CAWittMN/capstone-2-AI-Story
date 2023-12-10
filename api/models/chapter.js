@@ -1,8 +1,9 @@
+const db = require("../db");
 const { Model, DataTypes } = require("sequelize");
 const { openai } = require("../openAiApi");
+const { OPENAI_API_MODEL } = require("../config");
 const { elevenLabsApi } = require("../elevenLabsApi");
 const { buildPrompt } = require("../helpers/prompt");
-const db = require("../db");
 
 /**
  * Chapter model.
@@ -16,29 +17,34 @@ class Chapter extends Model {
    * Generates image and audio if story settings allow.
    * Returns the new chapter.
    */
-  static async generateNewChapter(story, user, userInput, content = null) {
-    let img = null;
-    let audio = null;
-
+  static async generateNewChapter(story, userInput, content = null) {
     // if content is null, generate new content
     if (!content) {
-      const prompt = buildPrompt(story, user, userInput);
+      const prompt = buildPrompt(story, userInput);
       const response = await openai.chat.completions.create({
-        model: "gpt-4-1106-preview",
+        model: OPENAI_API_MODEL,
         messages: prompt,
         stream: false,
         response_format: { type: "json_object" },
       });
       content = JSON.parse(response.choices[0].message.content);
     }
+    // if the users response was deemed invalid, return
     if (content.validResponse === false) {
       return content;
     }
 
     // generate image and/or audio if story settings allow
+    let img = null;
+    let audio = null;
     if (story.genImages && story.genAudio) {
-      img = await Chapter.generateImage(content.imgPrompt);
-      audio = await Chapter.generateAudio(content.text);
+      Promise.all([
+        Chapter.generateImage(content.imgPrompt),
+        Chapter.generateAudio(content.text),
+      ]).then((values) => {
+        img = values[0];
+        audio = values[1];
+      });
     } else if (story.genAudio && !story.genImage) {
       audio = await Chapter.generateAudio(content.text);
     } else if (!story.genAudio && story.genImages) {
@@ -54,7 +60,7 @@ class Chapter extends Model {
       StoryId: story.id,
       charAlive: content.charAlive,
     });
-
+    // add additional properties to new chapter
     newChapter.dataValues.validResponse = content.validResponse;
     newChapter.dataValues.newSummary = content.summary;
 
@@ -69,12 +75,13 @@ class Chapter extends Model {
       model: "dall-e-3",
       prompt: imgPrompt,
       n: 1,
+      quality: "hd",
       size: "1024x1024",
       response_format: "b64_json",
     });
     const imgData = response.data[0].b64_json;
-
-    const imgBuffer = await Buffer.from(imgData, "base64"); // convert base64 to buffer
+    // convert base64 to buffer
+    const imgBuffer = await Buffer.from(imgData, "base64");
     return imgBuffer;
   }
 
@@ -104,10 +111,6 @@ Chapter.init(
     userPrompt: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
-    StoryId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     },
     charAlive: {
       type: DataTypes.BOOLEAN,

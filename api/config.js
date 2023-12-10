@@ -9,9 +9,11 @@ const BCRYPT_WORK_FACTOR = process.env.NODE_ENV === "test" ? 1 : 12;
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-const OPENAI_API_MODEL = process.env.OPENAI_API_MODEL;
+const OPENAI_API_MODEL = "gpt-4-1106-preview";
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
+
+const ELEVENLABS_VOICE_ID = process.env.ELEVENLABS_VOICE_ID;
 
 const PORT = process.env.PORT || 5000;
 console.log("---");
@@ -36,6 +38,7 @@ module.exports = {
   BCRYPT_WORK_FACTOR,
   OPENAI_API_KEY,
   ELEVENLABS_API_KEY,
+  ELEVENLABS_VOICE_ID,
   PORT,
   OPENAI_API_MODEL,
 };

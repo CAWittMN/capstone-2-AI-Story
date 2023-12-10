@@ -11,26 +11,8 @@ const {
 const router = express.Router();
 
 /**
- * GET / => { users: [ {...user }, {...user}, ...]}
- *
- * Returns list of all users.
- *
- * Authorization required: admin
- */
-router.get("/", ensureAdmin, async (req, res, next) => {
-  try {
-    const users = await User.findAll();
-    return res.json({ users });
-  } catch (error) {
-    return next(error);
-  }
-});
-
-/**
  * GET /:username => { user }
- *
  * Returns user
- *
  * Authorization required: admin or logged in
  */
 router.get("/:username", ensureLoggedIn, async (req, res, next) => {
@@ -47,9 +29,7 @@ router.get("/:username", ensureLoggedIn, async (req, res, next) => {
 
 /**
  * PATCH /:username => { user }
- *
  * Updates user info and returns updated user
- *
  * Authorization required: admin or same user-as-:username
  */
 router.patch("/:username", ensureCorrectUser, async (req, res, next) => {
@@ -72,9 +52,7 @@ router.patch("/:username", ensureCorrectUser, async (req, res, next) => {
 
 /**
  * DELETE /:username => { deleted: username }
- *
  * Deletes user and returns deleted username
- *
  * Authorization required: admin
  */
 router.delete("/:username", ensureAdmin, async (req, res, next) => {
@@ -85,6 +63,20 @@ router.delete("/:username", ensureAdmin, async (req, res, next) => {
     });
     await user.destroy();
     return res.json({ deleted: username });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
+ * GET / => { users: [ {...user }, {...user}, ...]}
+ * Returns list of all users.
+ * Authorization required: admin
+ */
+router.get("/", ensureAdmin, async (req, res, next) => {
+  try {
+    const users = await User.findAll();
+    return res.json({ users });
   } catch (error) {
     return next(error);
   }

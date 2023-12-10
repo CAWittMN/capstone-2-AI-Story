@@ -3,23 +3,12 @@ const { Model, DataTypes } = require("sequelize");
 const Chapter = require("./chapter");
 const { buildPrompt } = require("../helpers/prompt");
 const { openai } = require("../openAiApi");
+const { OPENAI_API_MODEL } = require("../config");
 
 /**
  * Story model.
  * Represents a story.
  * Can generate a new story by calling Story.generateNewStory().
- * @param {string} title - The title of the story.
- * @param {string} mood - The mood of the story.
- * @param {string} genre - The genre of the story.
- * @param {string} charName - The name of the character in the story.
- * @param {string} setting - The setting of the story.
- * @param {number} maxChapters - The maximum number of chapters in the story.
- * @param {boolean} genImages - Boolean value if the story generates images.
- * @param {boolean} genAudio - Boolean value if the story generates audio.
- * @param {boolean} charAlive - Boolean value if the character is alive.
- * @param {boolean} completed - Boolean value if the story is completed.
- * @param {string} currSummary - The current summary of the story.
- * @param {number} completedChapters - The number of completed chapters in the story.
  *
  */
 class Story extends Model {
@@ -27,13 +16,14 @@ class Story extends Model {
    * Generate a new story.
    * Creates a new story instance and content for the first chapter.
    */
-  static async generateNewStory(inputs, user) {
-    inputs.moods = inputs.moods.join(", ");
+  static async generateNewStory(info, userID) {
+    info.moods = info.moods.join(", "); // convert moods to string
     // generate content
-    const prompt = buildPrompt(inputs, user);
+    const prompt = buildPrompt(info);
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo-1106",
+      model: OPENAI_API_MODEL,
       messages: prompt,
+      response_format: { type: "json_object" },
       stream: false,
     });
 
@@ -41,25 +31,25 @@ class Story extends Model {
 
     // create new story in database
     const newStory = await Story.create({
+      ...info,
       title: content.title,
-      moods: inputs.moods,
-      genre: inputs.genre,
-      charName: inputs.charName,
-      setting: inputs.setting ? inputs.setting : content.setting,
-      maxChapters: inputs.maxChapters,
-      genImages: inputs.genImages,
-      genAudio: inputs.genAudio,
-      additionalPrompt: inputs.additionalPrompt,
+      // moods: info.moods,
+      // genre: info.genre,
+      // demographic: info.demographic,
+      // charName: info.charName,
+      // charInfo: info.charInfo,
+      setting: info.setting ? info.setting : content.setting,
+      // maxChapters: info.maxChapters,
+      // genImages: info.genImages,
+      // genAudio: info.genAudio,
+      // additionalPrompt: info.additionalPrompt,
       currSummary: content.summary,
-      UserId: user.id,
+      UserId: userID,
     });
-    return { newStory, content };
-  }
 
-  /**
-   * Get a formatted string of the story's moods for display or text use.
-   * @returns {string}
-   */
+    // return the new story and the content
+    return { newStory, firstChapterContent: content };
+  }
 }
 
 Story.init(
@@ -76,7 +66,15 @@ Story.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    demographic: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     charName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    charInfo: {
       type: DataTypes.STRING,
       allowNull: false,
     },

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "Story Schema",
+  "required": [
+    "moods",
+    "genre",
+    "charName",
+    "setting",
+    "maxChapters",
+    "genImages",
+    "genAudio"
+  ],
+  "properties": {
+    "moods": {
+      "type": "string",
+      "title": "The moods Schema",
+      "examples": ["light, humorous"]
+    },
+    "genre": {
+      "type": "string",
+      "title": "The genre Schema",
+      "examples": ["comedy"]
+    },
+    "charName": {
+      "type": "string",
+      "title": "The charName Schema",
+      "examples": ["Joey"]
+    },
+    "setting": {
+      "type": "string",
+      "title": "The setting Schema",
+      "examples": ["A coffee shop in downtown New York"]
+    },
+    "maxChapters": {
+      "type": "integer",
+      "title": "The maxChapters Schema",
+      "examples": [30]
+    },
+    "genImages": {
+      "type": "boolean",
+      "title": "The genImages Schema",
+      "examples": [true]
+    },
+    "genAudio": {
+      "type": "boolean",
+      "title": "The genAudio Schema",
+      "examples": [true]
+    },
+    "additionalPrompt": {
+      "type": "string",
+      "default": "",
+      "title": "The additionalPrompt Schema",
+      "examples": ["And everyone look likes sandwhiches in this story"]
+    }
+  },
+  "examples": [
+    {
+      "moods": "light, humorous",
+      "genre": "comedy",
+      "charName": "Joey",
+      "setting": "A coffee shop in downtown New York",
+      "maxChapters": 30,
+      "genImages": true,
+      "genAudio": true,
+      "additionalPrompt": "And everyone look likes sandwhiches in this story"
+    }
+  ]
+}

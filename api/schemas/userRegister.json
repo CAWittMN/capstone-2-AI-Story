@@ -6,41 +6,62 @@
   "required": [
     "username",
     "password",
+    "email",
     "firstName",
     "lastName",
-    "email",
     "age",
     "gender"
   ],
   "properties": {
     "username": {
       "type": "string",
-      "title": "The username Schema"
+      "title": "The username Schema",
+      "examples": ["Joey50"]
     },
     "password": {
       "type": "string",
-      "title": "The password Schema"
-    },
-    "firstName": {
-      "type": "string",
-      "title": "The firstName Schema"
-    },
-    "lastName": {
-      "type": "string",
-      "title": "The lastName Schema"
+      "title": "The password Schema",
+      "examples": ["SandWich50"]
     },
     "email": {
       "type": "string",
-      "title": "The email Schema"
+      "title": "The email Schema",
+      "format": "email",
+      "examples": ["JoeyT@gmail.com"]
+    },
+    "firstName": {
+      "type": "string",
+      "title": "The firstName Schema",
+      "examples": ["Joey"]
+    },
+    "lastName": {
+      "type": "string",
+      "title": "The lastName Schema",
+      "examples": ["Tribiani"]
     },
     "age": {
       "type": "integer",
-      "title": "The age Schema"
+      "minimum": 4,
+      "maximum": 110,
+      "title": "The age Schema",
+      "examples": [29]
     },
     "gender": {
       "type": "string",
-      "title": "The gender Schema"
+      "title": "The gender Schema",
+      "examples": ["male"]
     }
   },
+  "examples": [
+    {
+      "username": "Joey50",
+      "password": "SandWich50",
+      "email": "JoeyT@gmail.com",
+      "firstName": "Joey",
+      "lastName": "Tribiani",
+      "age": 29,
+      "gender": "male"
+    }
+  ],
   "additionalProperties": false
 }

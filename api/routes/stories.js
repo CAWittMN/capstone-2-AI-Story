@@ -7,9 +7,10 @@ const {
   convertBufferImage,
   convertBufferAudio,
 } = require("../helpers/convertBuffer");
+const { getCharacterInfo } = require("../helpers/storyInfo");
 const { BadRequestError } = require("../expressError");
-//const jsonschema = require("jsonschema");
-//const storyNewSchema = require("../schemas/storyNew.json");
+const jsonschema = require("jsonschema");
+const newStorySchema = require("../schemas/newStory.json");
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ const router = express.Router();
  * GET /:username => { stories: [ {...story}, {...story}, ...]}
  * Returns all stories for a user.
  * Sort by date updated
+ * Authorization required: admin or same user-as-:username
  */
 router.get("/:username", ensureCorrectUser, async (req, res, next) => {
   const { username } = req.params;
@@ -36,8 +38,8 @@ router.get("/:username", ensureCorrectUser, async (req, res, next) => {
 
 /**
  * GET /:userId/:storyId => { story }
- *
  * Returns story
+ * Authorization required: admin or same user-as-:username
  */
 router.get("/:username/:storyId", ensureCorrectUser, async (req, res, next) => {
   const { storyId } = req.params;
@@ -47,6 +49,7 @@ router.get("/:username/:storyId", ensureCorrectUser, async (req, res, next) => {
       include: { model: Chapter, as: "chapters" },
       order: [["chapters", "createdAt", "ASC"]],
     });
+    // convert image and audio to base64
     for (let chapter of story.chapters) {
       if (chapter.img) {
         chapter.img = await convertBufferImage(chapter.img);
@@ -63,33 +66,41 @@ router.get("/:username/:storyId", ensureCorrectUser, async (req, res, next) => {
 
 /**
  * POST / => { story, chapter }
- *
  * Creates a new story and returns it
+ * Authorization required: admin or same user-as-:username
  */
 router.post("/:username/new", ensureCorrectUser, async (req, res, next) => {
+  // validate input schema
   try {
-    // const validator = jsonschema.validate(req.body, storyNewSchema);
-    // if (!validator.valid) {
-    //   const errs = validator.errors.map((e) => e.stack);
-    //   throw new BadRequestError(errs);
-    // }
+    const validator = jsonschema.validate(req.body, newStorySchema);
+    if (!validator.valid) {
+      const errs = validator.errors.map((e) => e.stack);
+      throw new BadRequestError(errs);
+    }
 
-    // get user
+    // get user info
     const { username } = req.params;
     const user = await User.findOne({
       where: { username: username },
     });
 
     // create story and content
-    const { newStory, content } = await Story.generateNewStory(req.body, user);
+    const storyInfo = {
+      ...req.body,
+      charInfo: getCharacterInfo(user.age, user.gender),
+      demographic: getDemographic(user.age),
+    };
+    const { newStory, firstChapterContent } = await Story.generateNewStory(
+      storyInfo,
+      user.id
+    );
 
     // create first chapter with null user input
     const userInput = null;
     const firstChapter = await Chapter.generateNewChapter(
       newStory,
-      user,
       userInput,
-      content
+      firstChapterContent
     );
     if (firstChapter.img) {
       firstChapter.img = await convertBufferImage(firstChapter.img);
@@ -109,42 +120,43 @@ router.post("/:username/new", ensureCorrectUser, async (req, res, next) => {
   }
 });
 
-/**POST / => { chapter }
- *
+/**
+ * POST / => { chapter }
  * creates a new chapter and adds it to the story
+ * Authorization required: admin or same user-as-:username
  */
 router.post(
   "/:username/:storyId/new-chapter",
   ensureCorrectUser,
   async (req, res, next) => {
+    // get story info
     try {
-      const { storyId, username } = req.params;
+      const { storyId } = req.params;
       const { userPrompt } = req.body;
-      const user = await User.findOne({
-        where: { username },
-      });
       const story = await Story.findOne({
         where: { id: storyId },
-        include: { model: User, as: "user" },
       });
-      const chapter = await Chapter.generateNewChapter(story, user, userPrompt);
+      //create new chapter
+      const chapter = await Chapter.generateNewChapter(story, userPrompt);
+      // check if user input deemed invalid and return if so
       if (chapter.validResponse === false) {
         return res.status(201).json({ chapter });
       }
-
+      // update the story
       const updatedStory = await story.increment("completedChapters");
       const updateSummary = await updatedStory.update({
         completed: story.maxChapters === updatedStory.completedChapters,
         currSummary:
           updatedStory.currSummary + " " + chapter.dataValues.newSummary,
       });
+      // check if character has died and update story if so
       if (chapter.charAlive === false) {
         const updateCharAlive = await updatedStory.update({
           charAlive: false,
           completed: true,
         });
       }
-
+      // convert image and audio to base64
       if (chapter.img) {
         chapter.img = await convertBufferImage(chapter.img);
       }
@@ -158,5 +170,41 @@ router.post(
     }
   }
 );
+
+/**
+ * DELETE /:username/:storyId
+ * Deletes story
+ * Authorization required: admin or same user-as-:username
+ */
+router.delete(
+  "/:username/:storyId",
+  ensureCorrectUser,
+  async (req, res, next) => {
+    try {
+      const { storyId } = req.params;
+      const story = await Story.findOne({
+        where: { id: storyId },
+      });
+      await story.destroy();
+      return res.json({ deleted: storyId });
+    } catch (error) {
+      return next(error);
+    }
+  }
+);
+
+/**
+ * GET / => { stories: [ {...story}, {...story}, ...]}
+ * Gets all stories
+ * Authorization required: admin
+ */
+router.get("/", ensureAdmin, async (req, res, next) => {
+  try {
+    const stories = await Story.findAll();
+    return res.json({ stories });
+  } catch (error) {
+    return next(error);
+  }
+});
 
 module.exports = router;
