@@ -32,16 +32,7 @@ class Story extends Model {
     const newStory = await Story.create({
       ...info,
       title: content.title,
-      // moods: info.moods,
-      // genre: info.genre,
-      // demographic: info.demographic,
-      // charName: info.charName,
-      // charInfo: info.charInfo,
       setting: info.setting ? info.setting : content.setting,
-      // maxChapters: info.maxChapters,
-      // genImages: info.genImages,
-      // genAudio: info.genAudio,
-      // additionalPrompt: info.additionalPrompt,
       currSummary: content.summary,
       UserId: userID,
     });

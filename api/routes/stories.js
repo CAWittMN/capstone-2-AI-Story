@@ -7,7 +7,7 @@ const {
   convertBufferImage,
   convertBufferAudio,
 } = require("../helpers/convertBuffer");
-const { getCharacterInfo } = require("../helpers/storyInfo");
+const { getCharacterInfo, getDemographic } = require("../helpers/storyInfo");
 const { BadRequestError } = require("../expressError");
 const jsonschema = require("jsonschema");
 const newStorySchema = require("../schemas/newStory.json");
