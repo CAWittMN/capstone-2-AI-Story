@@ -1,5 +1,4 @@
 import { Tabs, Tab } from "@nextui-org/react";
-import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ChapterSelect = ({
@@ -28,6 +27,7 @@ const ChapterSelect = ({
     );
   }
 
+  // Array of keys for disabled tabs
   const disabledKeys = [];
   for (let i = completedChapters + 1; i <= numChapters; i++) {
     disabledKeys.push(i.toString());

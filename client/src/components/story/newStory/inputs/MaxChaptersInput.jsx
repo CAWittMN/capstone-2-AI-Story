@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { RadioGroup } from "@nextui-org/react";
 import MaxChapterRadio from "./MaxChapterRadio";
 

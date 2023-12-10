@@ -1,7 +1,6 @@
 import { useEffect, useContext, useState } from "react";
 import AppContext from "../../context/AppContext";
 import { useParams } from "react-router-dom";
-
 import Chapter from "./Chapter";
 import UserInput from "./UserInput";
 import ChapterSelect from "./ChapterSelect";
@@ -14,6 +13,7 @@ const StoryPage = () => {
   const [chapters, setChapters] = useState([]);
   const [currChapterNum, setCurrChapterNum] = useState(null);
 
+  // get story and set chapters on mount if not already loaded
   useEffect(() => {
     const getStory = async () => {
       if (!currStory) {
@@ -29,6 +29,7 @@ const StoryPage = () => {
     getStory();
   }, []);
 
+  // create new chapter and update state
   const createNewChapter = async (data) => {
     let chapter = await handleCreateNewChapter(data, storyId);
     if (chapter.validResponse === true) {

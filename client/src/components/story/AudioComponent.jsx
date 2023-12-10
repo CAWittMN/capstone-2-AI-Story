@@ -1,13 +1,8 @@
-import { useRef } from "react";
-
 const AudioComponent = ({ audioData }) => {
-  const audioRef = useRef();
-  const sourceUrl = audioData;
-
   return (
     <div className="">
       {sourceUrl && (
-        <audio controls className="h-10 m-auto" src={sourceUrl}></audio>
+        <audio controls className="h-10 m-auto" src={audioData}></audio>
       )}
     </div>
   );

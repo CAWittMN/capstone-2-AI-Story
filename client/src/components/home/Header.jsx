@@ -1,10 +1,11 @@
 const Header = () => {
   return (
-    <div className="w-full  backdrop-blur-md rounded-full backdrop-brightness-[65%]">
+    <div className="md:w-2/4 w-full flex justify-center items-center rounded-full">
       <h1
-        className="m-auto w-full text-[4.5rem] md:text-[8rem] select-none text-center "
+        className="text-[4.5rem] mb-5 z-10 md:text-[8rem] select-none flex justify-center items-center"
         style={{
           fontFamily: "Alice",
+
           fontWeight: "bold",
         }}
       >
@@ -26,6 +27,7 @@ const Header = () => {
           Gen
         </span>
       </h1>
+      <div className="md:w-[580px] z-2 drop-shadow-lg w-full  rounded-full border-black border-[3rem]  blur-3xl  fixed"></div>
     </div>
   );
 };

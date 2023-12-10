@@ -11,6 +11,7 @@ const UserHome = () => {
   const { username, handleGetStories } = useContext(AppContext);
   const [selectedStory, setSelectedStory] = useState(stories[0] || null);
 
+  // get stories on mount if not already loaded
   useEffect(() => {
     const getStories = async () => {
       if (stories.length === 0) {
@@ -26,7 +27,7 @@ const UserHome = () => {
 
   return (
     <div style={{ fontFamily: "alice" }}>
-      <div className="container select-none flex h-[86vh] flex-col-reverse items-center md:flex-row justify-start md:justify-center">
+      <div className=" select-none flex h-[89vh] flex-col-reverse items-center md:flex-row justify-start md:justify-center">
         <div className="backdrop-brightness-75 backdrop-blur-sm w-screen md:w-1/4">
           <StoryList
             selectedStory={selectedStory}

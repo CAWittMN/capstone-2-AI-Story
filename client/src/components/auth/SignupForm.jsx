@@ -1,6 +1,6 @@
 import { useState, useContext, useMemo } from "react";
 import AppContext from "../../context/AppContext";
-import { Input, Button } from "@nextui-org/react";
+import { Input, Button, Select, SelectItem } from "@nextui-org/react";
 
 const SignupForm = () => {
   const { handleSignup } = useContext(AppContext);
@@ -14,11 +14,13 @@ const SignupForm = () => {
     age: 0,
   });
 
+  // handle change for controlled inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((f) => ({ ...f, [name]: value }));
   };
 
+  // validate email
   const validateEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
   const emailIsInvalid = useMemo(() => {
@@ -27,8 +29,9 @@ const SignupForm = () => {
   }, [formData.email]);
 
   return (
-    <div className="SignupForm backdrop-blur-lg rounded-3xl border border-success mt-6  container max-w-sm m-auto  justify-center flex flex-column">
+    <div className="SignupForm backdrop-blur-lg rounded-3xl border border-success container max-w-xs md:max-w-md justify-center items-center flex flex-column">
       <form
+        className="flex flex-col justify-center"
         onSubmit={(e) => {
           e.preventDefault();
           handleSignup(formData);
@@ -72,6 +75,7 @@ const SignupForm = () => {
           <Input
             label="Password"
             type="password"
+            autoComplete="on"
             isClearable
             onClear={() => setFormData({ ...formData, password: "" })}
             classNames={{
@@ -240,35 +244,24 @@ const SignupForm = () => {
           />
         </div>
         <div className="form-group m-4">
-          <Input
+          <Select
             label="Gender"
+            selectedKey={formData.gender}
             classNames={{
               label: "text-black/50 dark:text-white/90",
-              input: [
-                "bg-transparent",
-                "text-black/90 dark:text-white/90",
-                "placeholder:text-default-700/50 dark:placeholder:text-white/60",
-              ],
-
               innerWrapper: "bg-transparent",
-              inputWrapper: [
-                "shadow-xl",
-                "bg-default-200/50",
-                "dark:bg-default/60",
-                "backdrop-blur-xl",
-                "backdrop-saturate-200",
-                "hover:bg-default-200/70",
-                "dark:hover:bg-default/70",
-                "group-data-[focused=true]:bg-default-200/50",
-                "dark:group-data-[focused=true]:bg-default/60",
-                "!cursor-text",
-              ],
             }}
             name="gender"
-            value={formData.gender}
             onChange={handleChange}
             isRequired
-          />
+          >
+            <SelectItem key="male" value="male">
+              Male
+            </SelectItem>
+            <SelectItem key="female" value="female">
+              Female
+            </SelectItem>
+          </Select>
         </div>
         <Button
           type="submit"
@@ -276,7 +269,7 @@ const SignupForm = () => {
           auto
           size="large"
           radius="lg"
-          className="shadow-xl mt-4 rounded-b-none text-white/90 font-bold"
+          className="mt-4 hover:shadow-md rounded-b-none text-white/90 font-bold"
         >
           Sign Up
         </Button>

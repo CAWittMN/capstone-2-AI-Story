@@ -12,8 +12,8 @@ const GenConfigs = ({ onChange, genImagesVal, genAudioVal }) => {
         label="Generate Images"
         className="w-full"
         color="warning"
-        startContent={<FontAwesomeIcon icon="fa-volume-high" />}
-        endContent={<FontAwesomeIcon icon="fa-volume-xmark" />}
+        startContent={<FontAwesomeIcon icon="fa-eye" />}
+        endContent={<FontAwesomeIcon icon="fa-eye-slash" />}
       >
         Generate Images
       </Switch>
@@ -24,8 +24,8 @@ const GenConfigs = ({ onChange, genImagesVal, genAudioVal }) => {
         name="genAudio"
         label="Generate Audio"
         className="w-full"
-        startContent={<FontAwesomeIcon icon="fa-eye" />}
-        endContent={<FontAwesomeIcon icon="fa-eye-slash" />}
+        startContent={<FontAwesomeIcon icon="fa-volume-high" />}
+        endContent={<FontAwesomeIcon icon="fa-volume-xmark" />}
       >
         Generate Speech
       </Switch>

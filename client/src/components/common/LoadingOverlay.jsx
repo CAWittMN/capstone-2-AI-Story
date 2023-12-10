@@ -1,5 +1,9 @@
 import { CircleLoader } from "react-spinners";
 
+/**
+ * LoadingOverlay component
+ * Overlay that displays when loading
+ */
 const LoadingOverlay = ({ isLoading }) => {
   return (
     <div

@@ -9,13 +9,14 @@ const LoginForm = () => {
     password: "",
   });
 
+  // handle change for controlled inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((f) => ({ ...f, [name]: value }));
   };
 
   return (
-    <div className="LoginForm backdrop-blur-lg rounded-full border border-success mt-6  container max-w-sm m-auto  justify-center flex flex-column">
+    <div className="LoginForm backdrop-blur-lg rounded-full border border-success mt-6 container max-w-sm items-center justify-center flex flex-column">
       <form
         onSubmit={(e) => {
           e.preventDefault();

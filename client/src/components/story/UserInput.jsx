@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { Input } from "@nextui-org/react";
+
 const INITIAL_STATE = {
   userPrompt: "",
 };
@@ -7,6 +8,7 @@ const INITIAL_STATE = {
 const UserInput = ({ handleSubmit, isDisabled, userPrompt, isInvisible }) => {
   const [inputData, setInputData] = useState(INITIAL_STATE);
   const userInput = useRef();
+
   return (
     <div className="flex text-white w-[95%]  flex-col items-center">
       <form

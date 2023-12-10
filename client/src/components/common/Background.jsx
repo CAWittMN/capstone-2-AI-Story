@@ -4,9 +4,15 @@ import book from "../../images/book.png";
 import room from "../../images/room.png";
 import blackHole from "../../images/black-hole.png";
 
+/**
+ * Background component
+ * renders background images based on current page
+ * by changing opacity
+ */
 const Background = () => {
   const location = useLocation();
 
+  // check if current page is the same as the path
   const checkPage = (path) => {
     return location.pathname.includes(path);
   };

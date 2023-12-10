@@ -17,14 +17,14 @@ const ContinueStory = ({ story, onContinue }) => {
         className="border-success w-full select-none border border-opacity-70 backdrop-brightness-[60%]"
       >
         <CardHeader className="flex flex-row justify-between">
-          <span>{story.title}</span>
+          <span className="text-xs">{story.title}</span>
           <span className="flex flex-row border border-primary backdrop-brightness-90 px-3 py-1 rounded-xl ">
-            <FontAwesomeIcon icon="person-walking" />
+            <FontAwesomeIcon className="mr-1 mt-1" icon="person-walking" />
             {story.charName}
           </span>
         </CardHeader>
         <Divider />
-        <CardBody className="h-[12rem] overflow-scroll ">
+        <CardBody className="h-[12rem] md:no-scrollbar overflow-scroll ">
           <ScrollShadow>
             <div>
               <h1>Genre: {story.genre}</h1>
@@ -36,8 +36,8 @@ const ContinueStory = ({ story, onContinue }) => {
         </CardBody>
         <CardFooter className="flex flex-row justify-between">
           <div className="">
-            <span>
-              <FontAwesomeIcon icon="fa-book" className="mx-1" />
+            <span className="flex flex-col">
+              <FontAwesomeIcon icon="fa-book" className="mx-1 mr-1" />
               {story.completedChapters}/{story.maxChapters}
             </span>
           </div>

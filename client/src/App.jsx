@@ -47,14 +47,24 @@ library.add(
 
 /**
  * Main App Component.
- * controls App context of token, username, loading and error state, and users stories
+ * controls App context of token, username, loading and errors state,
  */
 const App = () => {
   const [token, setToken] = useLocalStorage("token");
   const [username, setUsername] = useLocalStorage("username");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
+
+  /**
+   * Load token and username into api
+   * if they are not already loaded
+   */
+  const loadApi = () => {
+    if (!StoryGenApi.token || !StoryGenApi.username) {
+      StoryGenApi.loadToken(token, username);
+    }
+  };
 
   /**
    * Load fonts and api on mount
@@ -69,16 +79,6 @@ const App = () => {
       loadApi();
     }
   }, [token, username]);
-
-  /**
-   * Load token and username into api
-   * if they are not already loaded
-   */
-  const loadApi = () => {
-    if (!StoryGenApi.token || !StoryGenApi.username) {
-      StoryGenApi.loadToken(token, username);
-    }
-  };
 
   /**
    * Global logout function
@@ -107,9 +107,9 @@ const App = () => {
       setIsLoading(false);
       loadApi();
       navigate(`/${username}`);
-    } catch (error) {
-      console.error("Login failed", error);
-      setError([error]);
+    } catch (errors) {
+      console.error("Login failed", errors);
+      setErrors([errors]);
       setIsLoading(false);
     }
   };
@@ -129,11 +129,10 @@ const App = () => {
       setUsername(data.username);
       setIsLoading(false);
       navigate(`/${data.username}`);
-    } catch (error) {
+    } catch (errors) {
       setIsLoading(false);
-      setError(error);
-      console.error("Register failed", error);
-      navigate("/");
+      setErrors(errors);
+      console.error("Register failed", errors);
     }
   };
 
@@ -148,10 +147,10 @@ const App = () => {
       let story = await StoryGenApi.createStory(data);
       setIsLoading(false);
       navigate(`/${username}/stories/${story.id}`);
-    } catch (error) {
+    } catch (errors) {
       setIsLoading(false);
-      setError(error);
-      console.error("Create story failed", error);
+      setErrors(errors);
+      console.error("Create story failed", errors);
       navigate(`/${username}`);
     }
   };
@@ -167,17 +166,21 @@ const App = () => {
       let newChapter = await StoryGenApi.createNewChapter(data, storyId);
       setIsLoading(false);
       if (newChapter.validResponse === false) {
-        setError(newChapter.message);
+        setErrors(newChapter.message);
       }
       return newChapter;
-    } catch (error) {
-      setError(error);
+    } catch (errors) {
+      setErrors(errors);
       setIsLoading(false);
-      console.error("Create chapter failed", error);
+      console.error("Create chapter failed", errors);
       navigate(`/stories/${storyId}`);
     }
   };
 
+  /**
+   * Global get story function
+   * gets story by id
+   */
   const handleGetStory = async (storyId) => {
     setIsLoading(true);
     loadApi();
@@ -185,14 +188,18 @@ const App = () => {
       let story = await StoryGenApi.getStory(storyId);
       setIsLoading(false);
       return story;
-    } catch (error) {
-      setError(error);
+    } catch (errors) {
+      setErrors(errors);
       setIsLoading(false);
-      console.error("Get story failed", error);
+      console.error("Get story failed", errors);
       navigate(`/${username}`);
     }
   };
 
+  /**
+   * Global get stories function
+   * gets all user stories
+   */
   const handleGetStories = async () => {
     loadApi();
     setIsLoading(true);
@@ -200,10 +207,10 @@ const App = () => {
       let stories = await StoryGenApi.getUserStories();
       setIsLoading(false);
       return stories;
-    } catch (error) {
-      setError(error);
+    } catch (errors) {
+      setErrors(errors);
       setIsLoading(false);
-      console.error("Get stories failed", error);
+      console.error("Get stories failed", errors);
     }
   };
 
@@ -222,7 +229,7 @@ const App = () => {
     >
       <Background />
       <LoadingOverlay isLoading={isLoading} />
-      <ErrorOverlay error={error} setError={setError} />
+      <ErrorOverlay errors={errors} setErrors={setErrors} />
       <StoryNavbar isLoggedIn={token ? true : false} logout={handleLogout} />
       <div className="container m-auto">
         <Router isLoggedIn={token ? true : false} username={username} />
