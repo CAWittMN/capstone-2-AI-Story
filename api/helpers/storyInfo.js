@@ -28,6 +28,7 @@ const getCharacterInfo = (age, gender) => {
       ? (characterGender += " man")
       : (characterGender += " woman");
   }
+  return characterGender;
 };
 
 /**

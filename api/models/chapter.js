@@ -38,13 +38,12 @@ class Chapter extends Model {
     let img = null;
     let audio = null;
     if (story.genImages && story.genAudio) {
-      Promise.all([
+      const results = await Promise.all([
         Chapter.generateImage(content.imgPrompt),
         Chapter.generateAudio(content.text),
-      ]).then((values) => {
-        img = values[0];
-        audio = values[1];
-      });
+      ]);
+      img = results[0];
+      audio = results[1];
     } else if (story.genAudio && !story.genImage) {
       audio = await Chapter.generateAudio(content.text);
     } else if (!story.genAudio && story.genImages) {

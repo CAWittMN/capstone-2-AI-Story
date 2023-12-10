@@ -50,9 +50,9 @@ const buildPrompt = (story, userInput = null) => {
   let systemResponseImg = genImages
     ? ", a very descriptive prompt for an image generator that describes in detail the scene of the chapter, "
     : "";
-  let systemResponseConfigSummary = currSummary
-    ? "and a short but detailed summary of the chapter with key details. "
-    : "and a summary of the story so far that includes the key details like setting, characters, and plot.";
+  let systemResponseConfigSummary =
+    "and a short but detailed summary of the chapter with key details. ";
+
   let systemResponseCharacter =
     completedChapters > 0
       ? `Additionally, if you deem that the user has chosen to do something that would result in the death of the main character, you will still generate the chapter which will conclude the story with the character's death even if ${maxChapters} have not been generated yet, however, you will return "false" for the boolean value that indicates whether or not the main character has died or lived. `

@@ -87,10 +87,12 @@ router.post("/:username/new", ensureCorrectUser, async (req, res, next) => {
     });
 
     // create story and content
+    const charInfo = getCharacterInfo(user.age, user.gender);
+    const demographic = getDemographic(user.age);
     const storyInfo = {
       ...req.body,
-      charInfo: getCharacterInfo(user.age, user.gender),
-      demographic: getDemographic(user.age),
+      charInfo,
+      demographic,
     };
     const { newStory, firstChapterContent } = await Story.generateNewStory(
       storyInfo,
