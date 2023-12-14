@@ -101,16 +101,22 @@ router.post("/:username/new", ensureCorrectUser, async (req, res, next) => {
 
     // create first chapter with null user input
     const userInput = null;
-    const firstChapter = await Chapter.generateNewChapter(
-      newStory,
-      userInput,
-      firstChapterContent
-    );
-    if (firstChapter.img) {
-      firstChapter.img = await convertBufferImage(firstChapter.img);
-    }
-    if (firstChapter.audio) {
-      firstChapter.audio = await convertBufferAudio(firstChapter.audio);
+    try {
+      const firstChapter = await Chapter.generateNewChapter(
+        newStory,
+        userInput,
+        firstChapterContent
+      );
+      if (firstChapter.img) {
+        firstChapter.img = await convertBufferImage(firstChapter.img);
+      }
+      if (firstChapter.audio) {
+        firstChapter.audio = await convertBufferAudio(firstChapter.audio);
+      }
+    } catch (error) {
+      console.error(error);
+      newStory.destroy();
+      return next(error);
     }
 
     newStory.dataValues.chapters = [firstChapter];
