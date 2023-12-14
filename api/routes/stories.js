@@ -101,8 +101,9 @@ router.post("/:username/new", ensureCorrectUser, async (req, res, next) => {
 
     // create first chapter with null user input
     const userInput = null;
+    let firstChapter;
     try {
-      const firstChapter = await Chapter.generateNewChapter(
+      firstChapter = await Chapter.generateNewChapter(
         newStory,
         userInput,
         firstChapterContent
