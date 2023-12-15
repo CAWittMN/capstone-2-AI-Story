@@ -155,7 +155,7 @@ You will need to have the latest version of NPM and PostgreSQL installed on your
 6. Create a .env file in `/client` and add the following variables
 
    ```js
-   REACT_APP_BASE_URL = "http://localhost:3005";
+   VITE_REACT_APP_API_URL=http://localhost:3005;
    ```
 
 7. Open a second terminal and run the following command in the `/api` directory on one terminal
