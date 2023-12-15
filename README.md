@@ -31,7 +31,8 @@
   <a href="https://github.com/CAWittMN/capstone-2-AI-Story">
     <img src="images/logo.png" alt="Logo"  height="120">
   </a>
-
+  <br/>
+  <img src="images/SGLogoSmall.png" alt="App Logo">
 <h3 align="center">StoryGen</h3>
 
   <p align="center">
