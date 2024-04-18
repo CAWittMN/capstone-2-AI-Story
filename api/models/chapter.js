@@ -4,6 +4,7 @@ const { openai } = require("../openAiApi");
 const { OPENAI_API_MODEL } = require("../config");
 const { elevenLabsApi } = require("../elevenLabsApi");
 const { buildPrompt } = require("../helpers/prompt");
+const { ElevenLabsAPIError } = require("../expressError");
 
 /**
  * Chapter model.
@@ -88,8 +89,12 @@ class Chapter extends Model {
    * Generate audio data.
    */
   static async generateAudio(text) {
-    const audioData = await elevenLabsApi.getAudio(text);
-    return audioData;
+    try {
+      const audioData = await elevenLabsApi.getAudio(text);
+      return audioData;
+    } catch (error) {
+      throw new ElevenLabsAPIError();
+    }
   }
 }
 

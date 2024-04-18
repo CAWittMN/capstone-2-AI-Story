@@ -36,6 +36,14 @@ class UnprocessableEntityError extends ExpressError {
   }
 }
 
+class ElevenLabsAPIError extends ExpressError {
+  constructor(
+    message = "ElevenLabs API Error. Because of the cost of the API, and this is just a personal project, there is a character limit of 10,000 for the server that has most likely been used up. Please try again at a later time to see if my allowed character limit has been reset or create a new story with the audio feature turned off. Thank you for your understanding."
+  ) {
+    super(message, 500);
+  }
+}
+
 module.exports = {
   ExpressError,
   NotFoundError,
@@ -43,4 +51,5 @@ module.exports = {
   UnauthorizedError,
   ForbiddenError,
   UnprocessableEntityError,
+  ElevenLabsAPIError,
 };

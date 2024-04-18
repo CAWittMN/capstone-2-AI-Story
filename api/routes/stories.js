@@ -8,7 +8,7 @@ const {
   convertBufferAudio,
 } = require("../helpers/convertBuffer");
 const { getCharacterInfo, getDemographic } = require("../helpers/storyInfo");
-const { BadRequestError } = require("../expressError");
+const { BadRequestError, ElevenLabsAPIError } = require("../expressError");
 const jsonschema = require("jsonschema");
 const newStorySchema = require("../schemas/newStory.json");
 
@@ -115,7 +115,6 @@ router.post("/:username/new", ensureCorrectUser, async (req, res, next) => {
         firstChapter.audio = await convertBufferAudio(firstChapter.audio);
       }
     } catch (error) {
-      console.error(error);
       newStory.destroy();
       return next(error);
     }
