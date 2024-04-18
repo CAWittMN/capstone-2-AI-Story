@@ -12,6 +12,7 @@ import useLocalStorage from "./hooks/useLocalStorage";
 import StoryGenApi from "./api";
 
 // Components
+import DisclaimerOverlay from "./components/common/DisclaimerOverlay";
 import Background from "./components/common/Background";
 import LoadingOverlay from "./components/common/LoadingOverlay";
 import ErrorOverlay from "./components/common/ErrorOverlay";
@@ -228,6 +229,7 @@ const App = () => {
       }}
     >
       <Background />
+      <DisclaimerOverlay />
       <LoadingOverlay isLoading={isLoading} />
       <ErrorOverlay errors={errors} setErrors={setErrors} />
       <StoryNavbar isLoggedIn={token ? true : false} logout={handleLogout} />
