@@ -167,7 +167,7 @@ const App = () => {
       let newChapter = await StoryGenApi.createNewChapter(data, storyId);
       setIsLoading(false);
       if (newChapter.validResponse === false) {
-        setErrors(newChapter.message);
+        setErrors([newChapter.message]);
       }
       return newChapter;
     } catch (errors) {

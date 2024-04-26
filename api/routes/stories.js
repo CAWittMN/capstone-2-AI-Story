@@ -38,7 +38,7 @@ router.get("/:username", ensureCorrectUser, async (req, res, next) => {
 
 /**
  * GET /:userId/:storyId => { story }
- * Returns story
+ * Returns story for a user based on storyId
  * Authorization required: admin or same user-as-:username
  */
 router.get("/:username/:storyId", ensureCorrectUser, async (req, res, next) => {

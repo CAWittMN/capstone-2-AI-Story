@@ -12,6 +12,7 @@ const StoryPage = () => {
   const [currStory, setCurrStory] = useState(null);
   const [chapters, setChapters] = useState([]);
   const [currChapterNum, setCurrChapterNum] = useState(null);
+  const [disableInput, setDisableInput] = useState(false);
 
   // get story and set chapters on mount if not already loaded
   useEffect(() => {
@@ -21,9 +22,11 @@ const StoryPage = () => {
         setCurrStory(story);
         setChapters(story.chapters);
         setCurrChapterNum(story.chapters.length);
+        setDisableInput(!story.charAlive);
       } else {
         setChapters(currStory.chapters);
         setCurrChapterNum(currStory.chapters.length);
+        setDisableInput(!currStory.charAlive);
       }
     };
     getStory();
@@ -35,6 +38,17 @@ const StoryPage = () => {
     if (chapter.validResponse === true) {
       setChapters([...chapters, chapter]);
       setCurrChapterNum(currChapterNum + 1);
+      if (!chapter.charAlive) setDisableInput(true);
+    }
+  };
+
+  // choose a chapter to view
+  const chooseChapter = (num) => {
+    setCurrChapterNum(num);
+    if (num === chapters.length && currStory.charAlive) {
+      setDisableInput(false);
+    } else {
+      setDisableInput(true);
     }
   };
 
@@ -52,10 +66,8 @@ const StoryPage = () => {
             <Chapter chapter={chapters[currChapterNum - 1]} className="" />
 
             <UserInput
-              isInvisible={currStory.maxChapters === currChapterNum}
-              isDisabled={
-                currStory.completed || chapters.length != currChapterNum
-              }
+              isDisabled={disableInput}
+              isAlive={currStory.charAlive}
               userPrompt={
                 chapters[currChapterNum]
                   ? chapters[currChapterNum].userPrompt
@@ -68,7 +80,7 @@ const StoryPage = () => {
             numChapters={currStory.maxChapters}
             completedChapters={chapters.length}
             currChapterNum={currChapterNum}
-            setCurrChapterNum={setCurrChapterNum}
+            handleChooseChapter={chooseChapter}
           />
         </>
       )}

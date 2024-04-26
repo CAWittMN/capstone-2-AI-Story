@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const ChapterSelect = ({
   numChapters,
   currChapterNum,
-  setCurrChapterNum,
+  handleChooseChapter,
   completedChapters,
 }) => {
   const tabs = [];
@@ -40,7 +40,7 @@ const ChapterSelect = ({
         selectedKey={currChapterNum.toString()}
         disabledKeys={disabledKeys}
         onSelectionChange={(val) => {
-          setCurrChapterNum(parseInt(val));
+          handleChooseChapter(parseInt(val));
         }}
         size="large"
         color="warning"
