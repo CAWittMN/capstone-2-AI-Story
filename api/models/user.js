@@ -61,9 +61,11 @@ class User extends Model {
 
   /**
    * Get all users including their stories.
+   * sort by id
    */
   static async getAllUsers() {
     const users = await User.findAll({
+      order: [["id", "ASC"]],
       include: { model: Story, as: "stories" },
     });
     return users;
