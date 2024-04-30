@@ -1,13 +1,13 @@
 import { useEffect, useContext, useState } from "react";
 import AppContext from "../../context/AppContext";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Chapter from "./Chapter";
 import UserInput from "./UserInput";
 import ChapterSelect from "./ChapterSelect";
 
 const StoryPage = () => {
-  const { storyId } = useParams();
-  const { handleGetStory, handleCreateNewChapter, isLoading } =
+  const { storyId, selectedUser } = useParams();
+  const { handleGetStory, handleCreateNewChapter, isLoading, currUser } =
     useContext(AppContext);
   const [currStory, setCurrStory] = useState(null);
   const [chapters, setChapters] = useState([]);
@@ -18,7 +18,7 @@ const StoryPage = () => {
   useEffect(() => {
     const getStory = async () => {
       if (!currStory) {
-        let story = await handleGetStory(storyId);
+        let story = await handleGetStory(storyId, selectedUser);
         setCurrStory(story);
         setChapters(story.chapters);
         setCurrChapterNum(story.chapters.length);

@@ -58,6 +58,16 @@ class User extends Model {
     }
     throw new NotFoundError("No such user");
   }
+
+  /**
+   * Get all users including their stories.
+   */
+  static async getAllUsers() {
+    const users = await User.findAll({
+      include: { model: Story, as: "stories" },
+    });
+    return users;
+  }
 }
 
 User.init(

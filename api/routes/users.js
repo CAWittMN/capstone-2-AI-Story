@@ -70,12 +70,12 @@ router.delete("/:username", ensureAdmin, async (req, res, next) => {
 
 /**
  * GET / => { users: [ {...user }, {...user}, ...]}
- * Returns list of all users.
+ * Returns list of all users, including stories
  * Authorization required: admin
  */
 router.get("/", ensureAdmin, async (req, res, next) => {
   try {
-    const users = await User.findAll();
+    const users = await User.getAllUsers();
     return res.json({ users });
   } catch (error) {
     return next(error);

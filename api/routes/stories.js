@@ -42,10 +42,13 @@ router.get("/:username", ensureCorrectUser, async (req, res, next) => {
  * Authorization required: admin or same user-as-:username
  */
 router.get("/:username/:storyId", ensureCorrectUser, async (req, res, next) => {
-  const { storyId } = req.params;
+  const { storyId, username } = req.params;
   try {
+    const user = await User.findOne({
+      where: { username },
+    });
     const story = await Story.findOne({
-      where: { id: storyId },
+      where: { id: storyId, UserId: user.id },
       include: { model: Chapter, as: "chapters" },
       order: [["chapters", "createdAt", "ASC"]],
     });

@@ -1,21 +1,23 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 import StoryList from "./StoryList";
 import ContinueStory from "./ContinueStory";
 import NewStoryButton from "./NewStoryButton";
 
 const UserHome = () => {
+  const { selectedUser } = useParams();
+  const { currUser, handleGetStories } = useContext(AppContext);
   const navigate = useNavigate();
   const [stories, setStories] = useState([]);
-  const { username, handleGetStories } = useContext(AppContext);
   const [selectedStory, setSelectedStory] = useState(stories[0] || null);
+  console.log(selectedUser);
 
   // get stories on mount if not already loaded
   useEffect(() => {
     const getStories = async () => {
       if (stories.length === 0) {
-        let stories = await handleGetStories();
+        let stories = await handleGetStories(selectedUser);
         if (stories.length > 0) {
           setStories(stories);
           setSelectedStory(stories[0]);
@@ -37,14 +39,17 @@ const UserHome = () => {
         </div>
         <div className="flex flex-col h-full md:justify-center gap-3  mt-5 md:m-0 items-center align-center right-0 w-3/4">
           <div className="top-10">
-            <NewStoryButton username={username} />
+            <NewStoryButton username={currUser} />
           </div>
           <div className="w-full">
             {stories.length > 0 && (
               <ContinueStory
-                username={username}
                 onContinue={() => {
-                  navigate(`/${username}/stories/${selectedStory.id}`);
+                  navigate(
+                    selectedUser
+                      ? `/admin/${selectedUser}/${selectedStory.id}`
+                      : `/stories/${selectedStory.id}`
+                  );
                 }}
                 story={selectedStory}
               />

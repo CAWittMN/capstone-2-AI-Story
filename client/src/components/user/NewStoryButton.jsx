@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const NewStoryButton = ({ username }) => {
+const NewStoryButton = () => {
   const navigate = useNavigate();
   return (
     <div
@@ -12,7 +12,7 @@ const NewStoryButton = ({ username }) => {
       }}
     >
       <Button
-        onClick={() => navigate(`/${username}/stories/new`)}
+        onClick={() => navigate(`/stories/new`)}
         variant="flat"
         color="warning"
         className="backdrop-blur-sm backdrop-brightness-[70%] text-2xl h-20 w-full text-white border border-warning border-opacity-20"

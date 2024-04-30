@@ -48,24 +48,15 @@ library.add(
 
 /**
  * Main App Component.
- * controls App context of token, username, loading and errors state,
+ * controls App context of token, currUser, loading and errors state,
  */
 const App = () => {
   const [token, setToken] = useLocalStorage("token");
-  const [username, setUsername] = useLocalStorage("username");
+  const [currUser, setCurrUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
-
-  /**
-   * Load token and username into api
-   * if they are not already loaded
-   */
-  const loadApi = () => {
-    if (!StoryGenApi.token || !StoryGenApi.username) {
-      StoryGenApi.loadToken(token, username);
-    }
-  };
 
   /**
    * Load fonts and api on mount
@@ -76,38 +67,38 @@ const App = () => {
         families: ["Lora", "Piazzolla", "Alice"],
       },
     });
-    if (token && username) {
-      loadApi();
+    if (token) {
+      const { username, isAdmin } = StoryGenApi.loadToken(token);
+      setCurrUser(username);
+      setIsAdmin(isAdmin);
     }
-  }, [token, username]);
+  }, [token]);
 
   /**
    * Global logout function
-   * clears token, username
+   * clears token, currUser
    * and logs out of api
    */
   const handleLogout = () => {
     setToken(null);
-    setUsername(null);
-    StoryGenApi.logout();
+    setCurrUser(null);
+    setIsAdmin(false);
   };
 
   /**
    * Global login function
-   * sets token and username
-   * sets api token and username
+   * sets token and currUser
+   * sets api token and currUser
    * and navigates to user home
    */
   const handleLogin = async (data) => {
     setIsLoading(true);
     try {
       let res = await StoryGenApi.login(data);
-      const { token, username } = res;
-      setUsername(username);
-      setToken(token);
+      setToken(res.token);
+      setCurrUser(res.username);
+      setIsAdmin(res.isAdmin);
       setIsLoading(false);
-      loadApi();
-      navigate(`/${username}`);
     } catch (errors) {
       console.error("Login failed", errors);
       setErrors([errors]);
@@ -118,8 +109,8 @@ const App = () => {
   /**
    * Global signup function
    * registers new user
-   * sets token and username
-   * sets api token and username
+   * sets token and currUser
+   * sets api token and currUser
    * and navigates to user home
    */
   const handleSignup = async (data) => {
@@ -127,7 +118,7 @@ const App = () => {
     try {
       let token = await StoryGenApi.register(data);
       setToken(token);
-      setUsername(data.username);
+      setCurrUser(data.username);
       setIsLoading(false);
       navigate(`/${data.username}`);
     } catch (errors) {
@@ -143,16 +134,15 @@ const App = () => {
    */
   const handleCreateStory = async (data) => {
     setIsLoading(true);
-    loadApi();
     try {
-      let story = await StoryGenApi.createStory(data);
+      let story = await StoryGenApi.createStory(token, data);
       setIsLoading(false);
-      navigate(`/${username}/stories/${story.id}`);
+      navigate(`/stories/${story.id}`);
     } catch (errors) {
       setIsLoading(false);
       setErrors(errors);
       console.error("Create story failed", errors);
-      navigate(`/${username}`);
+      navigate(`/`);
     }
   };
 
@@ -162,9 +152,8 @@ const App = () => {
    */
   const handleCreateNewChapter = async (data, storyId) => {
     setIsLoading(true);
-    loadApi();
     try {
-      let newChapter = await StoryGenApi.createNewChapter(data, storyId);
+      let newChapter = await StoryGenApi.createNewChapter(token, data, storyId);
       setIsLoading(false);
       if (newChapter.validResponse === false) {
         setErrors([newChapter.message]);
@@ -182,18 +171,22 @@ const App = () => {
    * Global get story function
    * gets story by id
    */
-  const handleGetStory = async (storyId) => {
+  const handleGetStory = async (storyId, selectedUser) => {
     setIsLoading(true);
-    loadApi();
     try {
-      let story = await StoryGenApi.getStory(storyId);
+      if (isAdmin && selectedUser) {
+        let story = await adminGetStory(selectedUser, storyId);
+        setIsLoading(false);
+        return story;
+      }
+      let story = await StoryGenApi.getStory(token, storyId);
       setIsLoading(false);
       return story;
     } catch (errors) {
       setErrors(errors);
       setIsLoading(false);
       console.error("Get story failed", errors);
-      navigate(`/${username}`);
+      navigate(`/`);
     }
   };
 
@@ -201,11 +194,16 @@ const App = () => {
    * Global get stories function
    * gets all user stories
    */
-  const handleGetStories = async () => {
-    loadApi();
+  const handleGetStories = async (selectedUser) => {
     setIsLoading(true);
+    console.log(isAdmin);
     try {
-      let stories = await StoryGenApi.getUserStories();
+      if (isAdmin && selectedUser) {
+        let stories = await adminGetUserStories(selectedUser);
+        setIsLoading(false);
+        return stories;
+      }
+      let stories = await StoryGenApi.getUserStories(token);
       setIsLoading(false);
       return stories;
     } catch (errors) {
@@ -215,26 +213,105 @@ const App = () => {
     }
   };
 
+  /**
+   * Admin function
+   * gets all users
+   */
+  const adminGetAllUsers = async () => {
+    setIsLoading(true);
+    try {
+      let users = await StoryGenApi.adminGetAllUsers(token);
+      setIsLoading(false);
+      return users;
+    } catch (errors) {
+      setErrors(errors);
+      setIsLoading(false);
+      console.error("Get users failed", errors);
+    }
+  };
+
+  /**
+   * Admin function
+   * get stories for a user
+   */
+  const adminGetAllStories = async () => {
+    setIsLoading(true);
+    try {
+      let stories = await StoryGenApi.adminGetAllStories(token);
+      return stories;
+    } catch (errors) {
+      setErrors(errors);
+      setIsLoading(false);
+      console.error("Get stories failed", errors);
+    }
+  };
+
+  /**
+   * Admin function
+   * get stories for a user
+   */
+  const adminGetUserStories = async (selectedUser) => {
+    setIsLoading(true);
+    try {
+      let stories = await StoryGenApi.adminGetUserStories(token, selectedUser);
+      return stories;
+    } catch (errors) {
+      setErrors(errors);
+      setIsLoading(false);
+      console.error("Get stories failed", errors);
+    }
+  };
+
+  /**
+   * Admin function
+   * get story for a user based on story id
+   */
+  const adminGetStory = async (selectedUser, storyId) => {
+    setIsLoading(true);
+    try {
+      let story = await StoryGenApi.adminGetStory(token, selectedUser, storyId);
+      return story;
+    } catch (errors) {
+      setErrors(errors);
+      setIsLoading(false);
+      console.error("Get story failed", errors);
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
         isLoading,
-        username,
+        currUser,
+        isAdmin,
         handleLogin,
         handleSignup,
         handleCreateStory,
         handleCreateNewChapter,
         handleGetStories,
         handleGetStory,
+        adminGetAllUsers,
+        adminGetAllStories,
+        adminGetUserStories,
+        adminGetStory,
       }}
     >
       <Background />
       <DisclaimerOverlay />
       <LoadingOverlay isLoading={isLoading} />
       <ErrorOverlay errors={errors} setErrors={setErrors} />
-      <StoryNavbar isLoggedIn={token ? true : false} logout={handleLogout} />
+      <StoryNavbar
+        isAdmin={isAdmin}
+        currUser={currUser}
+        isLoggedIn={token ? true : false}
+        logout={handleLogout}
+      />
       <div className="container m-auto">
-        <Router isLoggedIn={token ? true : false} username={username} />
+        <Router
+          isLoggedIn={token ? true : false}
+          currUser={currUser}
+          isAdmin={isAdmin}
+        />
       </div>
     </AppContext.Provider>
   );

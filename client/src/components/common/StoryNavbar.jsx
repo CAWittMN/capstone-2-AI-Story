@@ -9,21 +9,31 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import logo from "../../images/logo.png";
 
-const StoryNavbar = ({ isLoggedIn, logout }) => {
+const StoryNavbar = ({ isLoggedIn, isAdmin, currUser, logout }) => {
   const navigate = useNavigate();
   return (
     <Navbar position="sticky" isBlurred={true} shouldHideOnScroll={true}>
       <NavbarBrand>
-        <Link to="/">
+        <Link to={currUser}>
           <img className="rounded-lg" src={logo} alt="logo" />
         </Link>
         {isLoggedIn && (
-          <Link to="/">
+          <Link to={"/"}>
             <h3
               className=" ml-3 text-white select-none border px-3 py-1 rounded-xl opacity-80 text-xl font-bold"
               style={{ fontFamily: "Lora" }}
             >
               Stories
+            </h3>
+          </Link>
+        )}
+        {isAdmin && (
+          <Link to={`/admin`}>
+            <h3
+              className=" ml-3 text-white select-none border px-3 py-1 rounded-xl opacity-80 text-xl font-bold"
+              style={{ fontFamily: "Lora" }}
+            >
+              Admin
             </h3>
           </Link>
         )}
