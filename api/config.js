@@ -9,7 +9,7 @@ const BCRYPT_WORK_FACTOR = process.env.NODE_ENV === "test" ? 1 : 12;
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-const OPENAI_API_MODEL = "gpt-4-1106-preview";
+const OPENAI_API_MODEL = "gpt-4o";
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 
