@@ -4,6 +4,7 @@ const Chapter = require("./chapter");
 const { buildPrompt } = require("../helpers/prompt");
 const { openai } = require("../openAiApi");
 const { OPENAI_API_MODEL } = require("../config");
+const { BadRequestError } = require("../expressError");
 
 /**
  * Story model.
@@ -27,6 +28,9 @@ class Story extends Model {
     });
 
     const content = JSON.parse(response.choices[0].message.content);
+    if (content.storyDenied) {
+      throw BadRequestError(content.message);
+    }
 
     // create new story in database
     const newStory = await Story.create({
