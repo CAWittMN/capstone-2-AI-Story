@@ -39,17 +39,13 @@ const UserInput = ({
             input: "text-center",
           }}
           disabled={isDisabled}
-          placeholder={() => {
-            if (isAlive && !userPrompt && !isComplete) {
-              ("What happens next?");
-            } else if (!isAlive) {
-              ("The character has died.");
-            } else if (isComplete) {
-              ("The story is complete.");
-            } else {
-              userPrompt;
-            }
-          }}
+          placeholder={
+            isComplete
+              ? isAlive
+                ? "The End."
+                : "The character has died. The End"
+              : "What happens next?"
+          }
           value={userPrompt ? userPrompt : inputData.userPrompt}
           variant="faded"
           onChange={(e) =>

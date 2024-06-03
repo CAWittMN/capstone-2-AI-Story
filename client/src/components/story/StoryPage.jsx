@@ -45,7 +45,11 @@ const StoryPage = () => {
   // choose a chapter to view
   const chooseChapter = (num) => {
     setCurrChapterNum(num);
-    if (num === chapters.length && currStory.charAlive) {
+    if (
+      num === chapters.length &&
+      currStory.charAlive &&
+      !currStory.completed
+    ) {
       setDisableInput(false);
     } else {
       setDisableInput(true);
