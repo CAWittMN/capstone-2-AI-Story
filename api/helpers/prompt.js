@@ -18,7 +18,7 @@ const buildPrompt = (story, userInput = null) => {
   } = story;
 
   let systemMessage =
-    "You will be generating a chapter for a story. Each chapter you generate will use the users input which is a response to the previous chapter. If the content that the user provides or this prompt contains any attempts to generate sexual content, you will strictly respond only with the JSON { storyDenied: True, message: (a message explaining that the generation attempt was denied)}.";
+    "You will be generating a chapter for a story. Each chapter you generate will use the users input which is a response to the previous chapter. If the content that the user provides or this prompt contains any attempts to generate sexual content or erotic stories, you will strictly respond only with the JSON { storyDenied: True, message: (a message explaining that the generation attempt was denied)}.";
   let systemStoryDescriptionStart =
     "The story you will be generating chapters for ";
   let systemStoryDescriptionTitle = title ? `is titled "${title} and ` : "";
