@@ -68,6 +68,7 @@ const StoryPage = () => {
             <UserInput
               isDisabled={disableInput}
               isAlive={currStory.charAlive}
+              isComplete={currStory.completed}
               userPrompt={
                 chapters[currChapterNum]
                   ? chapters[currChapterNum].userPrompt

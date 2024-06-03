@@ -20,7 +20,9 @@ const UserInput = ({
       <form
         className={
           "w-full" +
-          (isDisabled ? " opacity-75 pointer-events-none" : " visible")
+          (isDisabled || isComplete
+            ? " opacity-75 pointer-events-none"
+            : " visible")
         }
         onSubmit={(e) => {
           e.preventDefault();
