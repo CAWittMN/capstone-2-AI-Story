@@ -30,7 +30,7 @@ const UserInput = ({ handleSubmit, isDisabled, userPrompt, isAlive }) => {
           classNames={{
             input: "text-center",
           }}
-          disabled={""}
+          disabled={isDisabled}
           placeholder={
             isAlive ? "What happens next?" : "The character has died."
           }
