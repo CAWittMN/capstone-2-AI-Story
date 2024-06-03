@@ -3,6 +3,8 @@ import { jwtDecode } from "jwt-decode";
 
 const BASE_URL =
   import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3005";
+const SAMPLE_ID = import.meta.env.VITE_REACT_APP_SAMPLE_ID || null;
+const SAMPLE_USER = import.meta.env.VITE_REACT_APP_SAMPLE_USER || null;
 
 /**
  *  API to interact with the StoryGen API.
@@ -105,6 +107,12 @@ class StoryGenApi {
       "delete"
     );
     return res;
+  }
+
+  //get sample story
+  static async getSampleStory() {
+    let res = await this.request(`stories/${SAMPLE_ID}`);
+    return res.story;
   }
 
   //Admin routes

@@ -26,11 +26,7 @@ const StoryPage = () => {
       } else {
         setChapters(currStory.chapters);
         setCurrChapterNum(currStory.chapters.length);
-        setDisableInput(
-          !currStory.charAlive ||
-            currStory.completedChapters === currStory.maxChapters ||
-            currStory.completed
-        );
+        setDisableInput(!currStory.charAlive || currStory.completed);
       }
     };
     getStory();

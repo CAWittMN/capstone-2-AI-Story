@@ -32,11 +32,10 @@ const DisclaimerOverlay = () => {
           Hello! Thanks for using StoryGen. Because of recent increased usage
           --almost 200 users! Wow!--, and this being a passion project, the
           limit for my OpenAI and Elevenlabs APIs are reached very quickly. I
-          will continue to work on increasing limits --requires me to pay more--
-          and work on a sample page for anyone --especially recruiters-- to view
-          when limits are reached. This app is also hosted on a free render
-          account so initial load times may be longer than expected. Thank you
-          for your understanding! -Casey
+          will continue to work on increasing limits and creating a sample page
+          for anyone --especially recruiters-- to view when limits are reached.
+          This app is also hosted on a free render account so initial load times
+          may be longer than expected. Thank you for your understanding! -Casey
         </h1>
         <Button
           variant="flat"
