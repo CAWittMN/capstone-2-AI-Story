@@ -5,7 +5,13 @@ const INITIAL_STATE = {
   userPrompt: "",
 };
 
-const UserInput = ({ handleSubmit, isDisabled, userPrompt, isAlive }) => {
+const UserInput = ({
+  handleSubmit,
+  isDisabled,
+  userPrompt,
+  isAlive,
+  isComplete,
+}) => {
   const [inputData, setInputData] = useState(INITIAL_STATE);
   const userInput = useRef();
 
@@ -31,9 +37,17 @@ const UserInput = ({ handleSubmit, isDisabled, userPrompt, isAlive }) => {
             input: "text-center",
           }}
           disabled={isDisabled}
-          placeholder={
-            isAlive ? "What happens next?" : "The character has died."
-          }
+          placeholder={() => {
+            if (isAlive && !userPrompt && !isComplete) {
+              ("What happens next?");
+            } else if (!isAlive) {
+              ("The character has died.");
+            } else if (isComplete) {
+              ("The story is complete.");
+            } else {
+              userPrompt;
+            }
+          }}
           value={userPrompt ? userPrompt : inputData.userPrompt}
           variant="faded"
           onChange={(e) =>
