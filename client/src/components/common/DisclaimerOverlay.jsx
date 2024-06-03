@@ -29,12 +29,14 @@ const DisclaimerOverlay = () => {
     >
       <div className="m-5 md:max-w-[50%]">
         <h1 className="text-2xl p-5 no-scrollbar overflow-scroll rounded-3xl border border-warning select-none text-white">
-          Hello! This app is hosted on a free Render server, which may be slow
-          to load initially. Also, the audio generation feature uses the Eleven
-          Labs API and has a limited number of uses per month for the server. If
-          the audio generation fails, try again some other time or create a new
-          story with the audio generation feature turned off. Thank you for your
-          understanding! Happy story generating!
+          Hello! Thanks for using StoryGen. Because of recent increased usage
+          --almost 200 users! Wow!--, and this being a passion project, the
+          limit for my OpenAI and Elevenlabs APIs are reached very quickly. I
+          will continue to work on increasing limits --requires me to pay more--
+          and work on a sample page for anyone --especially recruiters-- to view
+          when limits are reached. This app is also hosted on a free render
+          account so initial load times may be longer than expected. Thank you
+          for your understanding! -Casey
         </h1>
         <Button
           variant="flat"
