@@ -22,7 +22,7 @@ const StoryPage = () => {
         setCurrStory(story);
         setChapters(story.chapters);
         setCurrChapterNum(story.chapters.length);
-        setDisableInput(!story.charAlive);
+        setDisableInput(!story.charAlive || story.completed);
       } else {
         setChapters(currStory.chapters);
         setCurrChapterNum(currStory.chapters.length);
