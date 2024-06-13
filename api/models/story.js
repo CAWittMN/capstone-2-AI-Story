@@ -1,10 +1,7 @@
 const db = require("../db");
 const { Model, DataTypes } = require("sequelize");
 const Chapter = require("./chapter");
-const { buildPrompt } = require("../helpers/prompt");
-const { openai } = require("../openAiApi");
-const { OPENAI_API_MODEL } = require("../config");
-const { BadRequestError } = require("../expressError");
+const { storyGenAi } = require("../storyGenAiApi");
 
 /**
  * Story model.
@@ -17,32 +14,18 @@ class Story extends Model {
    * Generate a new story.
    * Creates a new story instance and content for the first chapter.
    */
-  static async generateNewStory(info, userID) {
-    // generate content
-    const prompt = buildPrompt(info);
-    const response = await openai.chat.completions.create({
-      model: OPENAI_API_MODEL,
-      messages: prompt,
-      response_format: { type: "json_object" },
-      stream: false,
-    });
-
-    const content = JSON.parse(response.choices[0].message.content);
-    if (content.storyDenied) {
-      throw BadRequestError(content.message);
-    }
-
+  static async generateNewStory(storyInfo, userID) {
+    // generate story assistant
+    const aiInfo = await storyGenAi.startStory(storyInfo);
     // create new story in database
     const newStory = await Story.create({
-      ...info,
-      title: content.title,
-      setting: info.setting ? info.setting : content.setting,
-      currSummary: content.summary,
+      ...storyInfo,
       UserId: userID,
+      threadId: aiInfo.threadId,
+      assistantId: aiInfo.id,
     });
-
     // return the new story and the content
-    return { newStory, firstChapterContent: content };
+    return newStory;
   }
 }
 
@@ -50,7 +33,7 @@ Story.init(
   {
     title: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     moods: {
       type: DataTypes.STRING,
@@ -60,15 +43,15 @@ Story.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    demographic: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     charName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    charInfo: {
+    assistantId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    threadId: {
       type: DataTypes.STRING,
       allowNull: false,
     },

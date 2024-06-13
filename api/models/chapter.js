@@ -1,10 +1,6 @@
 const db = require("../db");
 const { Model, DataTypes } = require("sequelize");
-const { openai } = require("../openAiApi");
-const { OPENAI_API_MODEL } = require("../config");
-const { elevenLabsApi } = require("../elevenLabsApi");
-const { buildPrompt } = require("../helpers/prompt");
-const { ElevenLabsAPIError } = require("../expressError");
+const { storyGenAi } = require("../storyGenAiApi");
 
 /**
  * Chapter model.
@@ -18,38 +14,26 @@ class Chapter extends Model {
    * Generates image and audio if story settings allow.
    * Returns the new chapter.
    */
-  static async generateNewChapter(story, userInput, content = null) {
-    // if content is null, generate new content
-    if (!content) {
-      const prompt = buildPrompt(story, userInput);
-      const response = await openai.chat.completions.create({
-        model: OPENAI_API_MODEL,
-        messages: prompt,
-        stream: false,
-        response_format: { type: "json_object" },
-      });
-      content = JSON.parse(response.choices[0].message.content);
-    }
-    // if the users response was deemed invalid, return
+  static async generateNewChapter(story, userInput) {
+    const content = await storyGenAi.generateChapter(story, userInput);
     if (content.validResponse === false) {
       return content;
     }
-
-    // generate image and/or audio if story settings allow
     let img = null;
     let audio = null;
     if (story.genImages && story.genAudio) {
       const results = await Promise.all([
-        Chapter.generateImage(content.imgPrompt),
-        Chapter.generateAudio(content.text),
+        storyGenAi.generateImage(content.imgPrompt),
+        storyGenAi.generateAudio(content.text),
       ]);
       img = results[0];
       audio = results[1];
     } else if (story.genAudio && !story.genImage) {
-      audio = await Chapter.generateAudio(content.text);
+      audio = await storyGenAi.generateAudio(content.text);
     } else if (!story.genAudio && story.genImages) {
-      img = await Chapter.generateImage(content.imgPrompt);
+      img = await storyGenAi.generateImage(content.imgPrompt);
     }
+    console.log("CONTENT", content);
 
     // create new chapter in database.
     const newChapter = await Chapter.create({
@@ -58,48 +42,35 @@ class Chapter extends Model {
       audio: audio,
       userPrompt: userInput,
       StoryId: story.id,
-      charAlive: content.charAlive,
+      title: content.chapterTitle,
     });
     // add additional properties to new chapter
     newChapter.dataValues.validResponse = content.validResponse;
-    newChapter.dataValues.newSummary = content.summary;
+    if (content.validResponse === false) {
+      newChapter.dataValues.message = content.message;
+    }
+    if (content.title) {
+      newChapter.title = content.title;
+    }
+    if (content.setting) {
+      newChapter.setting = content.setting;
+    }
+    newChapter.charAlive = content.charAlive;
+    newChapter.newSummary = content.summary;
+
+    console.log("NEW CHAPTER", newChapter);
 
     return newChapter;
-  }
-
-  /**
-   * Generate image data.
-   */
-  static async generateImage(imgPrompt) {
-    const response = await openai.images.generate({
-      model: "dall-e-3",
-      prompt: imgPrompt,
-      n: 1,
-      quality: "hd",
-      size: "1024x1024",
-      response_format: "b64_json",
-    });
-    const imgData = response.data[0].b64_json;
-    // convert base64 to buffer
-    const imgBuffer = await Buffer.from(imgData, "base64");
-    return imgBuffer;
-  }
-
-  /**
-   * Generate audio data.
-   */
-  static async generateAudio(text) {
-    try {
-      const audioData = await elevenLabsApi.getAudio(text);
-      return audioData;
-    } catch (error) {
-      throw new ElevenLabsAPIError();
-    }
   }
 }
 
 Chapter.init(
   {
+    title: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
     text: {
       type: DataTypes.STRING(5000),
       allowNull: false,
@@ -115,11 +86,6 @@ Chapter.init(
     userPrompt: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
-    charAlive: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true,
     },
   },
   {

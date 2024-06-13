@@ -7,8 +7,7 @@ const {
   convertBufferImage,
   convertBufferAudio,
 } = require("../helpers/convertBuffer");
-const { getCharacterInfo, getDemographic } = require("../helpers/storyInfo");
-const { BadRequestError, ElevenLabsAPIError } = require("../expressError");
+const { BadRequestError } = require("../expressError");
 const jsonschema = require("jsonschema");
 const newStorySchema = require("../schemas/newStory.json");
 
@@ -90,27 +89,17 @@ router.post("/:username/new", ensureCorrectUser, async (req, res, next) => {
     });
 
     // create story and content
-    const charInfo = getCharacterInfo(user.age, user.gender);
-    const demographic = getDemographic(user.age);
     const storyInfo = {
       ...req.body,
-      charInfo,
-      demographic,
     };
-    const { newStory, firstChapterContent } = await Story.generateNewStory(
-      storyInfo,
-      user.id
-    );
-
-    // create first chapter with null user input
-    const userInput = null;
+    const newStory = await Story.generateNewStory(storyInfo, user.id);
     let firstChapter;
     try {
-      firstChapter = await Chapter.generateNewChapter(
-        newStory,
-        userInput,
-        firstChapterContent
-      );
+      firstChapter = await Chapter.generateNewChapter(newStory);
+      if (firstChapter.validResponse === false) {
+        newStory.destroy();
+        throw new BadRequestError(firstChapter.message);
+      }
       if (firstChapter.img) {
         firstChapter.img = await convertBufferImage(firstChapter.img);
       }
@@ -121,7 +110,11 @@ router.post("/:username/new", ensureCorrectUser, async (req, res, next) => {
       newStory.destroy();
       return next(error);
     }
-
+    newStory.update({
+      currSummary: firstChapter.newSummary,
+      title: firstChapter.title,
+      setting: newStory.setting ? newStory.setting : firstChapter.setting,
+    });
     newStory.dataValues.chapters = [firstChapter];
 
     // add first chapter to story
