@@ -33,7 +33,6 @@ class Chapter extends Model {
     } else if (!story.genAudio && story.genImages) {
       img = await storyGenAi.generateImage(content.imgPrompt);
     }
-    console.log("CONTENT", content);
 
     // create new chapter in database.
     const newChapter = await Chapter.create({
@@ -57,8 +56,6 @@ class Chapter extends Model {
     }
     newChapter.charAlive = content.charAlive;
     newChapter.newSummary = content.summary;
-
-    console.log("NEW CHAPTER", newChapter);
 
     return newChapter;
   }

@@ -152,8 +152,7 @@ router.post(
       const updatedStory = await story.increment("completedChapters");
       const updateSummary = await updatedStory.update({
         completed: story.maxChapters === updatedStory.completedChapters,
-        currSummary:
-          updatedStory.currSummary + " " + chapter.dataValues.newSummary,
+        currSummary: chapter.newSummary,
       });
       // check if character has died and update story if so
       if (chapter.charAlive === false) {

@@ -17,19 +17,21 @@ OpenAI.prototype.generateInstructions = (storyInfo) => {
     maxChapters,
     additionalPrompt,
   } = storyInfo;
-  const basicInstructions = `You are a story generator similar to a choose-your-own-adventure story, however, you ultimately decide the outcome of the users choices and where the story goes. The story you are generating is a ${moods} ${genre} story. The main character is named ${charName}. `;
+  const basicInstructions = `You are a story generator similar to a choose-your-own-adventure story, however, you determine the outcome of the story. Each response from you will be a new chapter to the story. The story you are generating is a ${moods} ${genre} story. The main character is named ${charName}. `;
   const basicInsturctionsSetting = setting
     ? `The story is set in ${setting}. `
     : `The setting of the story is not specified and you will decide the setting. Please include the setting in the JSON for the first chapter as the key "setting". `;
   const basicInstructionsEnd = ` You will generate the title of the story include it in the JSON for the first chapter as the key "title". `;
-  const chapterInstructions = `As long as the character lives, this story will conclude in ${maxChapters} chapters, NO MORE THAN THAT. Each chapter should be around 400 words and leave a choice or action for the character to respond to. Be as creative as you can be and introduce twists into the story sometimes. You should have some idea of where the story will lead from the beginning. ${additionalPrompt}`;
-  const userResponseInstructions = `The user will respond to each chapter. You will decide the outcome and continue the story based on your outcome. The user's input should be considered an attempt for the character to do something. `;
+  const chapterInstructions = `As long as the character lives, this story will conclude in ${maxChapters} chapters, NO MORE THAN THAT, so make sure the story can conclude within that amount of chapters. Each chapter should be around 250 words with the first and last chapter being longer, and end with a choice, action, question to answer, riddle to answer, etc. for the character to respond to. Be as creative as you can be and introduce twists into the story sometimes. Do not leave the chapter open ended or in a way that the user is deciding what happens for the story. You should have some idea of where the story will lead from the beginning, but the story can also grow organically. ${additionalPrompt}`;
+  const userResponseInstructions = `The user will respond to the choice or action from each chapter (except for the last chapter so make sure the final choice or challenge is on the ${
+    maxChapters - 1
+  }th chapter). You will decide the outcome and continue the story. The user's input should be considered only an attempt for an action and you will decide whether it was successful or how to incorporate it into the story. `;
   const userResponseRestrictions =
     "If the users response does not make sense within the context of the story, you should respond ONLY with the JSON { validResponse: false, message: (a message explaining why the response was invalid)}. ";
   const userResponseDeath =
     "If you deem that the users response would result in the death of the character, you will still generate the chapter which will conclude the story with the character's death, however, you will return { charAlive: false } in the JSON response. ";
   const responseContent =
-    "Your response will include the title for the chapter, text for the new chapter, a short summary of the story so far, whether the character is still alive or not, whether the users response was valid or not, the title of the story with the first chapter data only";
+    "Your response will include the title for the chapter, text for the new chapter, a short summary of the entire story so far, whether the character is still alive or not, whether the users response was valid or not, the title of the story with the first chapter data only";
   const responseContentSetting = setting
     ? ""
     : ", the setting of the story with the first chapter data only";
@@ -37,7 +39,7 @@ OpenAI.prototype.generateInstructions = (storyInfo) => {
     ? ", and a very descriptive prompt for an AI (Dalle-3) image generator that describes in detail the scene of the chapter with accurate character details and story context (you can use the genre to help stylize the image, for example: Anime  would prompt for anime art style). "
     : ".";
   const responseFormat =
-    "Your response will be strictly ONLY in JSON format with the following keys: chapterTitle, text, summary, charAlive, validResponse, title (only with the first chapter data)";
+    "Your response will be strictly ONLY in JSON format with the following keys: chapterTitle, text(about 250 words), summary, charAlive, validResponse, title (only with the first chapter data)";
   const responseFormatSetting = setting
     ? ""
     : ", setting (only with the first chapter data)";
@@ -74,7 +76,6 @@ OpenAI.prototype.startStory = async function (storyInfo) {
   const thread = await this.beta.threads.create();
   storyAssistant.title = storyAssistant.name;
   storyAssistant.threadId = thread.id;
-  console.log(storyAssistant);
   return storyAssistant;
 };
 
