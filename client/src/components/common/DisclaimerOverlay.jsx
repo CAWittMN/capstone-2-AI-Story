@@ -30,12 +30,13 @@ const DisclaimerOverlay = () => {
       <div className="m-5 md:max-w-[50%]">
         <h1 className="text-2xl p-5 no-scrollbar overflow-scroll rounded-3xl border border-warning select-none text-white">
           Hello! Thanks for using StoryGen. Because of recent increased usage
-          -Almost 200 users! Wow!- and this being a passion project, the limit
-          for my OpenAI and Elevenlabs APIs are reached very quickly. I will
-          continue to work on increasing limits and creating a sample page for
-          anyone --especially recruiters-- to view when limits are reached. This
-          app is also hosted on a free render account so initial load times may
-          be longer than expected. Thank you for your understanding!
+          &#40;Almost 200 users! Wow!&#41; and this being a passion project, the
+          limit for my OpenAI and Elevenlabs APIs are reached very quickly. I
+          will continue to work on increasing limits and creating a sample page
+          for anyone &#40;especially recruiters&#41; to view in case limits are
+          reached and a story can not be generated. This app is also hosted on a
+          free render account so initial load times may be longer than expected.
+          Thank you for your understanding!
         </h1>
         <Button
           variant="flat"
