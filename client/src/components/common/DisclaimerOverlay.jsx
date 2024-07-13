@@ -31,9 +31,9 @@ const DisclaimerOverlay = () => {
         <h1 className="text-2xl p-5 no-scrollbar overflow-scroll rounded-3xl border border-warning select-none text-white">
           Hello! Thanks for using StoryGen. Because of recent increased usage
           &#40;almost 200 users! Wow!&#41; and this being a passion project, the
-          limit for my OpenAI and Elevenlabs APIs are reached very quickly. I
-          will continue to work on increasing limits and creating a sample page
-          for anyone &#40;especially recruiters&#41; to view in case monthly
+          monthly limits for my OpenAI and Elevenlabs APIs are reached very
+          quickly. I will continue to work on increasing limits and creating a
+          sample page for anyone &#40;especially recruiters&#41; to view in case
           limits are reached and a story can not be generated. This app is also
           hosted on a free render account so initial load times may be longer
           than expected. Thank you for your understanding!
