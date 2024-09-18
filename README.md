@@ -143,20 +143,19 @@ You will need to have the latest version of NPM and PostgreSQL installed on your
 
 5. Create a .env file in `/api` and add the following variables
 
-   ```js
-   SECRET_KEY = "anything_you_want";
-   OPENAI_API_KEY = "your_openai_api_key";
-   PORT = 3005;
-   ELEVENLABS_API_KEY = "your_elevenlabs_api_key";
-   DB_URI = "your_database_uri";
-   REACT_APP_BASE_URL = "http://localhost:3005";
-   ELEVENLABS_VOICE_ID = "ghWIe9V8UUJG9QUcMI3V";
+   ```env
+   SECRET_KEY="YOUR-SECRET-KEY";
+   OPENAI_API_KEY="YOUR-OPENAI-API-KEY";
+   PORT=3005;
+   ELEVENLABS_API_KEY="YOUR-ELEVENLABS-API-KEY";
+   DB_URI="YOUR-POSTGRESQL-DATABASE-URI";
+   ELEVENLABS_VOICE_ID="ghWIe9V8UUJG9QUcMI3V";
    ```
 
 6. Create a .env file in `/client` and add the following variables
 
-   ```js
-   VITE_REACT_APP_API_URL=http://localhost:3005;
+   ```env
+   VITE_REACT_APP_API_URL="http://localhost:3005";
    ```
 
 7. Open a second terminal and run the following command in the `/api` directory on one terminal
