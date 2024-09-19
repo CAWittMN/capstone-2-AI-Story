@@ -167,6 +167,18 @@ const App = () => {
     }
   };
 
+  const handleDeleteStory = async (storyId) => {
+    setIsLoading(true);
+    try {
+      await StoryGenApi.deleteStory(token, storyId);
+    } catch (errors) {
+      setErrors(errors);
+    } finally {
+      setIsLoading(false);
+      navigate("/");
+    }
+  };
+
   /**
    * Global get story function
    * gets story by id
@@ -196,7 +208,6 @@ const App = () => {
    */
   const handleGetStories = async (selectedUser) => {
     setIsLoading(true);
-    console.log(isAdmin);
     try {
       if (isAdmin && selectedUser) {
         let stories = await adminGetUserStories(selectedUser);
@@ -288,6 +299,7 @@ const App = () => {
         handleSignup,
         handleCreateStory,
         handleCreateNewChapter,
+        handleDeleteStory,
         handleGetStories,
         handleGetStory,
         adminGetAllUsers,

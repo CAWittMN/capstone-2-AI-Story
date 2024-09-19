@@ -17,7 +17,9 @@ const Chapter = ({ chapter }) => {
           <Image className="max-w-[70%] m-auto my-2" src={chapter.img} />
         )}
         <CardBody className="">
-          <ScrollShadow>{chapter.text}</ScrollShadow>
+          <ScrollShadow className="md:h-[30rem]">
+            <p>{chapter.text}</p>
+          </ScrollShadow>
         </CardBody>
       </Card>
       <AudioComponent audioData={chapter.audio} />

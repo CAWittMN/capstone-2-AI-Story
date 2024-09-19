@@ -6,10 +6,38 @@ import {
   CardFooter,
   ScrollShadow,
   Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const ContinueStory = ({ story, onContinue }) => {
+const motionProps = {
+  variants: {
+    enter: {
+      transform: "scale(1, 1)",
+      opacity: 1,
+      transition: {
+        duration: 0.1,
+        ease: "easeOut",
+      },
+    },
+    exit: {
+      transform: "scale(1, 0.5)",
+      opacity: 0,
+      transition: {
+        duration: 0.1,
+        ease: "easeIn",
+      },
+    },
+  },
+};
+
+const ContinueStory = ({ story, onContinue, onDelete }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <div className="md:w-[75%] m-auto">
       <Card
@@ -71,13 +99,59 @@ const ContinueStory = ({ story, onContinue }) => {
           onClick={onContinue}
           variant="ghost"
           color="warning"
-          className="backdrop-blur-sm backdrop-brightness-75 w-full text-white"
+          size="lg"
+          className="backdrop-blur-sm mt-3 backdrop-brightness-75 w-full text-white"
         >
           {story.completed ? "Review" : "Continue"}
         </Button>
+        <Button
+          onPress={onOpen}
+          variant="bordered"
+          size="sm"
+          className="backdrop-blur-sm mt-3 backdrop-brightness-75 w-full"
+        >
+          Delete
+        </Button>
+        <Modal
+          size="xs"
+          backdrop="blur"
+          isOpen={isOpen}
+          onClose={onClose}
+          isDismissable={false}
+          placement="center"
+          motionProps={motionProps}
+          className="bg-black text-red-500 font-bold text-center"
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalBody>
+                  <p>Are you sure you want to delete this story?</p>
+                </ModalBody>
+                <ModalFooter className="m-auto">
+                  <Button
+                    variant="ghost"
+                    color="danger"
+                    onPress={() => {
+                      onDelete();
+                      onClose();
+                    }}
+                  >
+                    Yes
+                  </Button>
+                  <Button variant="ghost" color="warning" onPress={onClose}>
+                    No
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </div>
     </div>
   );
 };
 
 export default ContinueStory;
+
+25;

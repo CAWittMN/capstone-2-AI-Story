@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 const AdminUserCard = ({ user }) => {
   const navigate = useNavigate();
-  console.log(user);
 
   return (
     <div

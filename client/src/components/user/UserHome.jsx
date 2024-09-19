@@ -7,11 +7,11 @@ import NewStoryButton from "./NewStoryButton";
 
 const UserHome = () => {
   const { selectedUser } = useParams();
-  const { currUser, handleGetStories } = useContext(AppContext);
+  const { currUser, handleGetStories, handleDeleteStory } =
+    useContext(AppContext);
   const navigate = useNavigate();
   const [stories, setStories] = useState([]);
   const [selectedStory, setSelectedStory] = useState(stories[0] || null);
-  console.log(selectedUser);
 
   // get stories on mount if not already loaded
   useEffect(() => {
@@ -50,6 +50,14 @@ const UserHome = () => {
                       ? `/admin/${selectedUser}/${selectedStory.id}`
                       : `/stories/${selectedStory.id}`
                   );
+                }}
+                onDelete={() => {
+                  const newStoriesList = stories.filter(
+                    (story) => story.id != selectedStory.id
+                  );
+                  handleDeleteStory(selectedStory.id);
+                  setStories(newStoriesList);
+                  setSelectedStory(newStoriesList[0]);
                 }}
                 story={selectedStory}
               />
