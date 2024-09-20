@@ -309,7 +309,7 @@ const App = () => {
       }}
     >
       <Background />
-      <DisclaimerOverlay />
+      {/* <DisclaimerOverlay /> */}
       <LoadingOverlay isLoading={isLoading} />
       <ErrorOverlay errors={errors} setErrors={setErrors} />
       <StoryNavbar

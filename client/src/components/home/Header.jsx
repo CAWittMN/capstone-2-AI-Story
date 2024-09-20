@@ -1,11 +1,21 @@
+import { useSpring, animated } from "@react-spring/web";
+
 const Header = () => {
+  const springs = useSpring({
+    config: { duration: 5000 },
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    delay: 1000,
+  });
   return (
-    <div className="md:w-2/4 w-full flex justify-center items-center rounded-full">
+    <animated.div
+      style={{ ...springs }}
+      className="md:w-2/4 w-full flex justify-center items-center rounded-full"
+    >
       <h1
         className="text-[4.5rem] mb-5 z-10 md:text-[8rem] select-none flex justify-center items-center"
         style={{
           fontFamily: "Alice",
-
           fontWeight: "bold",
         }}
       >
@@ -28,7 +38,7 @@ const Header = () => {
         </span>
       </h1>
       <div className="md:w-[580px] z-2 drop-shadow-lg w-full  rounded-full border-black border-[3rem]  blur-3xl  fixed"></div>
-    </div>
+    </animated.div>
   );
 };
 
