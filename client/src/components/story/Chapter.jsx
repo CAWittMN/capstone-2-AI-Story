@@ -3,12 +3,13 @@ import { useState } from "react";
 import AudioComponent from "./AudioComponent";
 import { useTransition, animated } from "@react-spring/web";
 
-const Chapter = ({ chapter }) => {
+const Chapter = ({ chapter, index }) => {
   const transitions = useTransition(chapter, {
     config: { duration: 250 },
     from: { opacity: 0 },
     enter: { opacity: 1, delay: 250 },
     leave: { opacity: 0 },
+    delay: 300,
     exitBeforeEnter: true,
   });
   return (

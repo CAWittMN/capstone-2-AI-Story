@@ -62,9 +62,10 @@ const UserHome = () => {
           style={{
             scrollbar: "hide",
             fontFamily: "alice",
+            position: "fixed",
           }}
         >
-          <div className="select-none flex h-[89vh] flex-col-reverse items-center md:flex-row justify-start md:justify-center">
+          <div className="no-scrollbar select-none flex h-[89vh] flex-col-reverse items-center md:flex-row justify-start md:justify-center">
             <StoryList
               selectedStory={selectedStory}
               select={setSelectedStory}

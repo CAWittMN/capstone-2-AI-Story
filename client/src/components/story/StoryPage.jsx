@@ -7,13 +7,8 @@ import ChapterSelect from "./ChapterSelect";
 
 const StoryPage = () => {
   const { storyId, selectedUser } = useParams();
-  const {
-    handleGetStory,
-    handleCreateNewChapter,
-    isLoading,
-    currUser,
-    setFirstOpen,
-  } = useContext(AppContext);
+  const { handleGetStory, handleCreateNewChapter, isLoading, setFirstOpen } =
+    useContext(AppContext);
   const [currStory, setCurrStory] = useState(null);
   const [chapters, setChapters] = useState([]);
   const [currChapterNum, setCurrChapterNum] = useState(null);
@@ -73,8 +68,7 @@ const StoryPage = () => {
               transition: "opacity 0.5s ease-in-out",
             }}
           >
-            <Chapter chapter={chapters[currChapterNum - 1]} className="" />
-
+            <Chapter chapter={chapters[currChapterNum - 1]} />
             <UserInput
               isDisabled={disableInput}
               isAlive={currStory.charAlive}
