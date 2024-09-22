@@ -41,7 +41,6 @@ const ContinueStory = ({ story, onContinue, onDelete }) => {
   return (
     <div className="md:w-[75%] m-auto">
       <Card
-        isBlurred
         className="border-success w-full select-none border border-opacity-70 backdrop-brightness-[60%]"
       >
         <CardHeader className="flex flex-row justify-between">

@@ -10,7 +10,7 @@ import {
 const Header = ({ firstOpen, setFirstOpen, token }) => {
   const [stayVisible, setStayVisible] = useState(true);
   const transitions = useTransition(stayVisible, {
-    config: { duration: 2000 },
+    config: { duration: 1000 },
     from: { opacity: 0, display: stayVisible ? "" : "none" },
     enter: { opacity: 1 },
     leave: { opacity: 0 },

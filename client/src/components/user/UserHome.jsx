@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { useSpring, animated } from "@react-spring/web";
+import { useSpring, animated, easings } from "@react-spring/web";
 import { useNavigate, useParams } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 import StoryList from "./StoryList";
 import ContinueStory from "./ContinueStory";
 import NewStoryButton from "./NewStoryButton";
 import Header from "../home/Header";
+import { transform } from "framer-motion";
 
 const UserHome = () => {
   const { selectedUser } = useParams();
@@ -22,10 +23,10 @@ const UserHome = () => {
   const [selectedStory, setSelectedStory] = useState(stories[0] || null);
 
   const springs = useSpring({
-    config: { duration: 500 },
+    config: { duration: 500, easing: easings.easeInBack },
     from: { opacity: 0, display: "none" },
     to: { opacity: 1, display: "" },
-    delay: firstOpen ? 8000 : 0,
+    delay: firstOpen ? 10000 : 500,
   });
 
   // get stories on mount if not already loaded
@@ -57,28 +58,23 @@ const UserHome = () => {
         </div>
       )}
       {token && (
-        <animated.div
+        <div
           style={{
-            ...springs,
             scrollbar: "hide",
             fontFamily: "alice",
-            // opacity: firstOpen ? 0 : 1,
-            // transition: "all 1s ease",
-            // display: firstOpen ? "none" : "",
           }}
         >
-          <div
-            styles={{ ...springs }}
-            className=" select-none flex h-[89vh] flex-col-reverse items-center md:flex-row justify-start md:justify-center"
-          >
-            <div className="backdrop-brightness-75 backdrop-blur-sm w-screen md:w-1/4">
-              <StoryList
-                selectedStory={selectedStory}
-                select={setSelectedStory}
-                stories={stories}
-              />
-            </div>
-            <div className="flex flex-col h-full md:justify-center gap-3  mt-5 md:m-0 items-center align-center right-0 w-3/4">
+          <div className="select-none flex h-[89vh] flex-col-reverse items-center md:flex-row justify-start md:justify-center">
+            <StoryList
+              selectedStory={selectedStory}
+              select={setSelectedStory}
+              stories={stories}
+              firstOpen={firstOpen}
+            />
+            <animated.div
+              style={{ ...springs }}
+              className="flex flex-col h-full md:justify-center gap-3  mt-5 md:m-0 items-center align-center right-0 w-3/4"
+            >
               <div className="top-10">
                 <NewStoryButton username={currUser} />
               </div>
@@ -104,9 +100,9 @@ const UserHome = () => {
                   />
                 )}
               </div>
-            </div>
+            </animated.div>
           </div>
-        </animated.div>
+        </div>
       )}
     </>
   );

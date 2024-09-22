@@ -1,5 +1,6 @@
 import { Tabs, Tab } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSpring, animated } from "@react-spring/web";
 
 const ChapterSelect = ({
   numChapters,
@@ -7,6 +8,11 @@ const ChapterSelect = ({
   handleChooseChapter,
   completedChapters,
 }) => {
+  const springs = useSpring({
+    from: { x: -500 },
+    to: { x: 0 },
+    delay: 1000,
+  });
   const tabs = [];
   for (let i = 1; i <= numChapters; i++) {
     tabs.push(
@@ -34,7 +40,10 @@ const ChapterSelect = ({
   }
 
   return (
-    <div className="container h-[3.75rem] no-scrollbar overflow-x-scroll fixed bottom-0 ">
+    <animated.div
+      style={{ ...springs }}
+      className="container h-[3.75rem] no-scrollbar overflow-x-scroll fixed bottom-0 "
+    >
       <Tabs
         className="backdrop-blur-lg border-t  border-warning border-opacity-50 shadow-xl rounded-t-full px-5"
         selectedKey={currChapterNum.toString()}
@@ -49,7 +58,7 @@ const ChapterSelect = ({
       >
         {tabs}
       </Tabs>
-    </div>
+    </animated.div>
   );
 };
 

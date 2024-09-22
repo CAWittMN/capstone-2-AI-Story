@@ -5,12 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const NewStoryButton = () => {
   const navigate = useNavigate();
   return (
-    <div
-      className="text-center"
-      style={{
-        width: "50vw",
-      }}
-    >
+    <div className="text-center md:w-[30rem] w-[50vw]">
       <Button
         onClick={() => navigate(`/stories/new`)}
         variant="flat"
