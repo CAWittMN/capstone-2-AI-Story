@@ -72,7 +72,6 @@ const App = () => {
       const { username, isAdmin } = StoryGenApi.loadToken(token);
       setCurrUser(username);
       setIsAdmin(isAdmin);
-      console.log("tokenloaded");
     }
   }, [token]);
 

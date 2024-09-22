@@ -18,11 +18,9 @@ const Header = ({ firstOpen, setFirstOpen, token }) => {
     onRest: (_a, _b, item) => {
       if (token) {
         setStayVisible(false);
-        console.log("done");
       }
     },
     onDestroyed: (i, k) => {
-      console.log("destroyed");
       setFirstOpen(false);
     },
   });
