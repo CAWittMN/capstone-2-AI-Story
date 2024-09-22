@@ -51,6 +51,7 @@ library.add(
  * controls App context of token, currUser, loading and errors state,
  */
 const App = () => {
+  const [firstOpen, setFirstOpen] = useState(true);
   const [token, setToken] = useLocalStorage("token");
   const [currUser, setCurrUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -71,6 +72,7 @@ const App = () => {
       const { username, isAdmin } = StoryGenApi.loadToken(token);
       setCurrUser(username);
       setIsAdmin(isAdmin);
+      console.log("tokenloaded");
     }
   }, [token]);
 
@@ -83,6 +85,7 @@ const App = () => {
     setToken(null);
     setCurrUser(null);
     setIsAdmin(false);
+    setFirstOpen(true);
   };
 
   /**
@@ -99,6 +102,7 @@ const App = () => {
       setCurrUser(res.username);
       setIsAdmin(res.isAdmin);
       setIsLoading(false);
+      setFirstOpen(false);
     } catch (errors) {
       console.error("Login failed", errors);
       setErrors([errors]);
@@ -292,6 +296,8 @@ const App = () => {
   return (
     <AppContext.Provider
       value={{
+        firstOpen,
+        setFirstOpen,
         isLoading,
         currUser,
         isAdmin,
@@ -306,6 +312,7 @@ const App = () => {
         adminGetAllStories,
         adminGetUserStories,
         adminGetStory,
+        token,
       }}
     >
       <Background />
@@ -318,7 +325,7 @@ const App = () => {
         isLoggedIn={token ? true : false}
         logout={handleLogout}
       />
-      <div className="container m-auto">
+      <div className={"container m-auto"}>
         <Router
           isLoggedIn={token ? true : false}
           currUser={currUser}

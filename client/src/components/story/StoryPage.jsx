@@ -7,8 +7,13 @@ import ChapterSelect from "./ChapterSelect";
 
 const StoryPage = () => {
   const { storyId, selectedUser } = useParams();
-  const { handleGetStory, handleCreateNewChapter, isLoading, currUser } =
-    useContext(AppContext);
+  const {
+    handleGetStory,
+    handleCreateNewChapter,
+    isLoading,
+    currUser,
+    setFirstOpen,
+  } = useContext(AppContext);
   const [currStory, setCurrStory] = useState(null);
   const [chapters, setChapters] = useState([]);
   const [currChapterNum, setCurrChapterNum] = useState(null);
@@ -29,6 +34,7 @@ const StoryPage = () => {
         setDisableInput(!currStory.charAlive || currStory.completed);
       }
     };
+    setFirstOpen(false);
     getStory();
   }, []);
 

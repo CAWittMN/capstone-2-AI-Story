@@ -22,6 +22,7 @@ const Background = () => {
     config: { duration: 2000 },
     from: { opacity: 0 },
     to: { opacity: 1 },
+    delay: 1000,
   });
 
   return (
