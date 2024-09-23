@@ -1,6 +1,6 @@
 import { Tabs, Tab } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useSpring, animated } from "@react-spring/web";
+import { useSpring, animated, easings } from "@react-spring/web";
 
 const ChapterSelect = ({
   numChapters,
@@ -8,10 +8,23 @@ const ChapterSelect = ({
   handleChooseChapter,
   completedChapters,
 }) => {
+  let x;
+  let dur;
+  if (numChapters === 10) {
+    x = -1950;
+    dur = 1000;
+  } else if (numChapters === 20) {
+    x = -2500;
+    dur = 1500;
+  } else {
+    x = -3000;
+    dur = 2000;
+  }
   const springs = useSpring({
-    from: { x: -500 },
-    to: { x: 0 },
-    delay: 1000,
+    from: { x: x, opacity: 0 },
+    to: { x: 0, opacity: 1 },
+    delay: 750,
+    config: { duration: dur, easing: easings.easeOutCubic },
   });
   const tabs = [];
   for (let i = 1; i <= numChapters; i++) {

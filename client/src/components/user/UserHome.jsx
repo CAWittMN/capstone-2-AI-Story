@@ -6,7 +6,6 @@ import StoryList from "./StoryList";
 import ContinueStory from "./ContinueStory";
 import NewStoryButton from "./NewStoryButton";
 import Header from "../home/Header";
-import { transform } from "framer-motion";
 
 const UserHome = () => {
   const { selectedUser } = useParams();
@@ -24,9 +23,9 @@ const UserHome = () => {
 
   const springs = useSpring({
     config: { duration: 500, easing: easings.easeInBack },
-    from: { opacity: 0, display: "none" },
-    to: { opacity: 1, display: "" },
-    delay: firstOpen ? 10000 : 500,
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    delay: firstOpen ? 8000 : 500,
   });
 
   // get stories on mount if not already loaded
@@ -60,12 +59,10 @@ const UserHome = () => {
       {token && (
         <div
           style={{
-            scrollbar: "hide",
             fontFamily: "alice",
-            position: "fixed",
           }}
         >
-          <div className="no-scrollbar select-none flex h-[89vh] flex-col-reverse items-center md:flex-row justify-start md:justify-center">
+          <div className="select-none flex h-[89vh] flex-col-reverse items-center md:flex-row justify-start md:justify-center">
             <StoryList
               selectedStory={selectedStory}
               select={setSelectedStory}

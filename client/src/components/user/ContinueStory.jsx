@@ -40,9 +40,7 @@ const ContinueStory = ({ story, onContinue, onDelete }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <div className="md:w-[75%] m-auto">
-      <Card
-        className="border-success w-full select-none border border-opacity-70 backdrop-brightness-[60%]"
-      >
+      <Card className="border-success w-full select-none border border-opacity-70 backdrop-brightness-[60%]">
         <CardHeader className="flex flex-row justify-between">
           <span className="text-xs">{story.title}</span>
           <span className="flex flex-row border border-primary backdrop-brightness-90 px-3 py-1 rounded-xl ">
