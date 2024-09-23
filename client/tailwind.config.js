@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-
+const plugin = require("tailwindcss/plugin");
 const { nextui } = require("@nextui-org/react");
 
 export default {
@@ -12,5 +12,14 @@ export default {
     extend: {},
   },
   darkMode: "class",
-  plugins: [nextui()],
+  plugins: [
+    nextui(),
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        ".hide-scrollbar::-webkit-scrollbar": {
+          display: "none",
+        },
+      });
+    }),
+  ],
 };
