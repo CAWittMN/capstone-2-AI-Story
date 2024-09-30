@@ -11,6 +11,7 @@ const UserInput = ({
   userPrompt,
   isAlive,
   isComplete,
+  charName,
 }) => {
   const [inputData, setInputData] = useState(INITIAL_STATE);
   const userInput = useRef();
@@ -40,13 +41,15 @@ const UserInput = ({
           }}
           disabled={isDisabled}
           placeholder={
-            isComplete
-              ? isAlive
-                ? "The End."
-                : "The character has died. The End"
-              : "What happens next?"
+            userPrompt
+              ? userPrompt
+              : !isAlive
+              ? `${charName} has died. The end`
+              : isComplete
+              ? "The end."
+              : `What does ${charName} do?`
           }
-          value={userPrompt ? userPrompt : inputData.userPrompt}
+          value={inputData.userPrompt}
           variant="faded"
           onChange={(e) =>
             setInputData({ ...inputData, userPrompt: e.target.value })

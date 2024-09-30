@@ -1,30 +1,34 @@
+import { useState } from "react";
 import { Button, Link } from "@nextui-org/react";
-import { useState, useEffect } from "react";
+import { useSpring, animated } from "@react-spring/web";
 
 /**
  * ElevenLabsApiNoticeOverlay component
  * Overlay that displays a disclaimer about the limited use of the audio generation
  */
-const DisclaimerOverlay = () => {
-  const [isDismissed, setIsDismissed] = useState(false);
-
-  useEffect(() => {
-    setIsDismissed(false);
-  }, []);
+const DisclaimerOverlay = ({ firstOpen }) => {
+  const [display, setDisplay] = useState(firstOpen);
+  const springs = useSpring({
+    from: { opacity: 0, pointerEvents: "none" },
+    to: {
+      opacity: display ? 1 : 0,
+      pointerEvents: display ? "all" : "none",
+    },
+    delay: firstOpen && display ? 8000 : 0,
+    config: { duration: 100 },
+  });
 
   return (
-    <div
+    <animated.div
       className="loading-overlay fixed top-0 left-0 flex justify-center items-center"
       style={{
         zIndex: 1020,
         width: "100vw",
         height: "100vh",
-        opacity: !isDismissed ? "1" : "0",
         backgroundColor: "rgba(0, 0, 0, 0.75)",
         backdropFilter: "blur(3px)",
-
         transition: "all 0.5s ease",
-        pointerEvents: !isDismissed ? "all" : "none",
+        ...springs,
       }}
     >
       <div className="m-5 md:max-w-[50%]">
@@ -48,13 +52,13 @@ const DisclaimerOverlay = () => {
         <Button
           variant="flat"
           color="warning"
-          onClick={() => setIsDismissed(true)}
+          onClick={() => setDisplay(false)}
           className="mt-3 w-full"
         >
           Dismiss
         </Button>
       </div>
-    </div>
+    </animated.div>
   );
 };
 /**

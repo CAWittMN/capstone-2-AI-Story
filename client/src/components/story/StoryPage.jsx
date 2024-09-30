@@ -9,6 +9,8 @@ const StoryPage = () => {
   const { storyId, selectedUser } = useParams();
   const { handleGetStory, handleCreateNewChapter, isLoading, setFirstOpen } =
     useContext(AppContext);
+  const [isAlive, setIsAlive] = useState(true);
+  const [isComplete, setIsComplete] = useState(false);
   const [currStory, setCurrStory] = useState(null);
   const [chapters, setChapters] = useState([]);
   const [currChapterNum, setCurrChapterNum] = useState(null);
@@ -23,6 +25,8 @@ const StoryPage = () => {
         setChapters(story.chapters);
         setCurrChapterNum(story.chapters.length);
         setDisableInput(!story.charAlive || story.completed);
+        setIsAlive(story.charAlive);
+        setIsComplete(story.completed);
       } else {
         setChapters(currStory.chapters);
         setCurrChapterNum(currStory.chapters.length);
@@ -33,27 +37,27 @@ const StoryPage = () => {
     getStory();
   }, []);
 
+  // choose a chapter to view
+  const chooseChapter = (num) => {
+    setCurrChapterNum(num);
+    if (num != chapters.length || !isAlive || isComplete) {
+      setDisableInput(true);
+    } else {
+      setDisableInput(false);
+    }
+  };
+
   // create new chapter and update state
   const createNewChapter = async (data) => {
     let chapter = await handleCreateNewChapter(data, storyId);
     if (chapter.validResponse === true) {
-      setChapters([...chapters, chapter]);
-      setCurrChapterNum(currChapterNum + 1);
-      if (!chapter.charAlive) setDisableInput(true);
-    }
-  };
-
-  // choose a chapter to view
-  const chooseChapter = (num) => {
-    setCurrChapterNum(num);
-    if (
-      num === chapters.length &&
-      currStory.charAlive &&
-      !currStory.completed
-    ) {
-      setDisableInput(false);
-    } else {
-      setDisableInput(true);
+      const newChapterArr = [...chapters, chapter];
+      if (!chapter.charAlive) setIsAlive(false);
+      if (newChapterArr.length === currStory.maxChapters) setIsComplete(true);
+      if (!chapter.charAlive || newChapterArr.length === currStory.maxChapters)
+        setDisableInput(true);
+      setChapters(newChapterArr);
+      setCurrChapterNum(newChapterArr.length);
     }
   };
 
@@ -71,13 +75,14 @@ const StoryPage = () => {
             <Chapter chapter={chapters[currChapterNum - 1]} />
             <UserInput
               isDisabled={disableInput}
-              isAlive={currStory.charAlive}
-              isComplete={currStory.completed}
+              isAlive={isAlive}
+              isComplete={isComplete}
               userPrompt={
                 chapters[currChapterNum]
                   ? chapters[currChapterNum].userPrompt
                   : null
               }
+              charName={currStory.charName}
               handleSubmit={createNewChapter}
             />
           </div>
