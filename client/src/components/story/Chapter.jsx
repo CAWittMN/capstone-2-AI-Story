@@ -29,9 +29,9 @@ const Chapter = ({ chapter, index }) => {
             {chapter.img && (
               <Image className="max-w-[70%] m-auto my-2" src={chapter.img} />
             )}
-            <CardBody className="">
-              <ScrollShadow className="md:h-[30rem]">
-                <p>{chapter.text}</p>
+            <CardBody>
+              <ScrollShadow className="md:h-[30rem] flex">
+                <p className="m-auto max-w-[50rem]">{chapter.text}</p>
               </ScrollShadow>
             </CardBody>
           </Card>
