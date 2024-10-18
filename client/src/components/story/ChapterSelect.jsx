@@ -20,27 +20,37 @@ const ChapterSelect = ({
     x = -3000;
     dur = 2000;
   }
+
   const springs = useSpring({
     from: { x: x, opacity: 0 },
     to: { x: 0, opacity: 1 },
-    delay: 750,
+    delay: 800,
     config: { duration: dur, easing: easings.easeOutCubic },
   });
+
   const tabs = [];
   for (let i = 1; i <= numChapters; i++) {
+    const tabDelay = dur + 150;
+    const spring = useSpring({
+      from: { y: 500 },
+      to: { y: 0 },
+      delay: tabDelay + 75 * i,
+    });
     tabs.push(
       <Tab
         key={i}
         value={i}
         title={
-          <div className="flex flex-col items-center">
-            {i <= completedChapters ? (
-              <FontAwesomeIcon icon="fa-check" />
-            ) : (
-              <FontAwesomeIcon icon="fa-lock" />
-            )}
-            <span>{i}</span>
-          </div>
+          <animated.div style={{ ...spring }}>
+            <div className="flex flex-col items-center">
+              {i <= completedChapters ? (
+                <FontAwesomeIcon icon="fa-check" />
+              ) : (
+                <FontAwesomeIcon icon="fa-lock" />
+              )}
+              <span>{i}</span>
+            </div>
+          </animated.div>
         }
       />
     );
@@ -55,7 +65,7 @@ const ChapterSelect = ({
   return (
     <animated.div
       style={{ ...springs }}
-      className="container h-[3.75rem] no-scrollbar overflow-x-scroll fixed bottom-0 "
+      className="container h-[3.75rem] md:scrollbar-default sm:no-scrollbar overflow-x-scroll fixed bottom-0 "
     >
       <Tabs
         className="backdrop-blur-lg border-t  border-warning border-opacity-50 shadow-xl rounded-t-full px-5"

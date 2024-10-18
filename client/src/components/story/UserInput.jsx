@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { Input } from "@nextui-org/react";
+import { animated, useSpring } from "@react-spring/web";
 
 const INITIAL_STATE = {
   userPrompt: "",
@@ -15,9 +16,17 @@ const UserInput = ({
 }) => {
   const [inputData, setInputData] = useState(INITIAL_STATE);
   const userInput = useRef();
+  const spring = useSpring({
+    from: { x: 6000 },
+    to: { x: 0 },
+    delay: 1000,
+  });
 
   return (
-    <div className="flex text-white w-[95%]  flex-col items-center">
+    <animated.div
+      style={{ ...spring }}
+      className="flex text-white w-[95%]  flex-col items-center"
+    >
       <form
         className={
           "w-full" +
@@ -56,7 +65,7 @@ const UserInput = ({
           }
         />
       </form>
-    </div>
+    </animated.div>
   );
 };
 
