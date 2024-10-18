@@ -60,7 +60,7 @@ const Chapter = ({ chapter, index }) => {
             }}
           >
             <CardBody>
-              <ScrollShadow className="md:h-[30rem] flex">
+              <ScrollShadow className="md:h-[30rem] max-h-48 flex">
                 <p className="m-auto max-w-[50rem]">{chapter.text}</p>
               </ScrollShadow>
             </CardBody>
