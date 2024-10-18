@@ -17,15 +17,15 @@ const UserInput = ({
   const [inputData, setInputData] = useState(INITIAL_STATE);
   const userInput = useRef();
   const spring = useSpring({
-    from: { x: 6000 },
-    to: { x: 0 },
+    from: { opacity: 0 },
+    to: { opacity: 1 },
     delay: 1000,
   });
 
   return (
     <animated.div
       style={{ ...spring }}
-      className="flex text-white w-[95%]  flex-col items-center"
+      className="flex text-white w-[95%] flex-col items-center"
     >
       <form
         className={
